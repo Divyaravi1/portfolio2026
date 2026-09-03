@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+
+  <title>Seeing Inside AI Agents | Divya Ravi</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <link rel="icon" href="data:,">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+
+  <!-- Runs before any CSS. Two jobs, both fail-safe:
+       1. adds .js to <html> — [data-aos] hiding is gated on it, so if this
+          script never runs every animated element renders visible.
+       2. adds .preloader-seen on repeat visits in the same tab, so the
+          preloader is never painted on internal navigation (no flash). -->
+  <script>
+    document.documentElement.className += ' js';
+    try {
+      if (sessionStorage.getItem('dr-preloader-shown')) {
+        document.documentElement.className += ' preloader-seen';
+      }
+    } catch (e) { /* private mode / storage blocked — just show the preloader */ }
+  </script>
+  <!-- PATH: vendor CSS — Bootstrap 5, Bootstrap Icons, AOS (CDN; local vendor/ was absent) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <!-- PATH: main stylesheet -->
+  <link href="assets/css/projectstyle.css" rel="stylesheet">
+  <!-- PATH: shared case study styles — hero pattern (flow strip to follow) -->
+  <link href="assets/css/case-study.css?v=5" rel="stylesheet">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MVNYZ6Y0L4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MVNYZ6Y0L4');
+  </script>
+
+  <style>
+    /* ── Palette ── */
+    :root {
+      --mint:       #F6E3C4;
+      --mint-mid:   #E3C68A;
+      --mint-deep:  #B8862A;
+      --green-dark: #945D0B;
+      --green-ink:  #4A2F06;
+      --white:      #ffffff;
+      --off-white:  #f4fdf9;
+      --text-body:  #3A2E1A;
+      --text-muted: #6B5A38;
+      --border:     #EFDFBE;
+    }
+
+    /* ── Global overrides (scoped) ── */
+    body { background: var(--white); }
+
+    /* ── Home button colour ── */
+    .home-btn { background: rgba(13, 61, 46, 0.8); }
+    .home-btn:hover { background: rgba(13, 61, 46, 0.95); }
+
+    /* ── Section labels ── */
+    .oz-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      border-bottom: 2px solid var(--mint);
+      padding-bottom: 0.35rem;
+      margin-bottom: 1.4rem;
+      display: inline-block;
+    }
+
+    /* ── Abstract band ── */
+    .oz-abstract {
+      background: var(--off-white);
+      border-left: 5px solid var(--mint-deep);
+      padding: 2rem 2.4rem;
+      border-radius: 0 10px 10px 0;
+      margin: 2rem 0;
+    }
+    .oz-abstract p {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--text-body);
+      margin: 0;
+    }
+
+    /* ── Role pills ── */
+    .role-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      padding: 0;
+      list-style: none;
+      margin: 0.5rem 0 0;
+    }
+    .role-list li {
+      background: var(--mint);
+      color: var(--green-ink);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+    }
+
+    /* ── Context band ── */
+    .oz-context-band {
+      background: var(--green-ink);
+      width: 100%;
+      padding: 3.5rem 0;
+    }
+    .oz-context-band h3 { color: var(--mint) !important; }
+    .oz-context-band h4 { color: var(--mint-mid) !important; font-family: 'Syne', sans-serif !important; }
+    .oz-context-band p.oz-context-band li { color: rgba(246, 227, 196,0.8) !important; line-height: 1.8; }
+
+    /* ── Why it matters cards ── */
+    .why-card {
+      background: rgba(246, 227, 196,0.07);
+      border: 1px solid rgba(246, 227, 196,0.18);
+      border-top: 3px solid var(--mint-deep);
+      border-radius: 0 0 10px 10px;
+      padding: 1.4rem 1.6rem;
+      height: 100%;
+    }
+    .why-card .why-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      color: var(--mint-deep);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .why-card h4 { color: var(--mint) !important; font-size: 0.9rem !important; font-weight: 700 !important; margin-bottom: 0.6rem; }
+    .why-card p { font-size: 0.88rem !important; color: rgba(246, 227, 196,0.75) !important; margin: 0; }
+
+    /* ── RQ callout ── */
+    .rq-callout {
+      background: var(--off-white);
+      border-left: 4px solid var(--mint-deep);
+      padding: 1.2rem 1.6rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0 2rem;
+    }
+    .rq-callout p {
+      margin: 0;
+      font-size: 0.98rem;
+      color: var(--green-ink);
+      font-weight: 600;
+      font-style: normal !important;
+      line-height: 1.6;
+    }
+
+    /* ── Study Design section ── */
+    .oz-study { background: #FDF9F0; width: 100%; }
+
+    /* ── Condition cards ── */
+    .condition-card {
+      border-radius: 10px;
+      padding: 1.5rem 1.8rem;
+      margin-bottom: 1rem;
+      border-left: 5px solid;
+    }
+    .condition-card.opaque      { background: #FDF9F0; border-color: #E3C68A; }
+    .condition-card.partial     { background: #FBF4E8; border-color: #B8862A; }
+    .condition-card.transparent { background: #F7EDD9; border-color: #945D0B; }
+    .condition-card .cond-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      margin-bottom: 0.3rem;
+    }
+    /* Condition screenshots are LANDSCAPE WEB captures (§5.2). The container
+       ratio matches the source, so nothing is cropped, letterboxed or forced
+       into portrait. */
+    .oz-condition-shot {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: contain;   /* was: cover — shows the whole image, no cropping */
+      object-position: top;
+      margin: 0;
+      border-radius: 10%;
+    }
+    .condition-card h4 { color: var(--green-ink) !important; font-size: 0.95rem !important; font-weight: 700 !important; margin-bottom: 0.4rem; }
+    .condition-card p { font-size: 0.88rem; color: var(--text-muted); margin: 0; }
+
+    /* ── Findings section ── */
+    .oz-findings { background: #f4fdf9; width: 100%; }
+
+    /* ── Finding cards ── */
+    .finding-card {
+      border-radius: 10px;
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 1.8rem;
+    }
+    .finding-card.fc-1 { background: #FAF3E6; border-left: 5px solid #B8862A; }
+    .finding-card.fc-2 { background: #F5EBD7; border-left: 5px solid #A6741A; }
+    .finding-card.fc-3 { background: #F0E4C8; border-left: 5px solid #945D0B; }
+
+    .finding-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      opacity: 0.7;
+      margin-bottom: 0.25rem;
+    }
+    .finding-card h4 {
+      font-size: 1rem !important;
+      font-weight: 700 !important;
+      color: var(--green-ink) !important;
+      margin-bottom: 0.7rem;
+    }
+    .stat-pill {
+      display: inline-block;
+      background: var(--white);
+      border-radius: 20px;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+      color: var(--green-dark);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .finding-card ul { padding-left: 1.1rem; margin-bottom: 0; }
+    .finding-card li { font-size: 0.92rem; color: var(--text-body); padding: 2px 0; line-height: 1.7; }
+
+    /* ── Strategy grid ── */
+    .strategy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 768px) { .strategy-grid { grid-template-columns: 1fr; } }
+    .strategy-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .strategy-pct {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--green-dark);
+      line-height: 1;
+      display: block;
+    }
+    .strategy-change {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--mint-deep);
+      letter-spacing: 0.08em;
+    }
+    .strategy-name {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+      font-weight: 600;
+    }
+
+    /* ── Implication box ── */
+    .implication-box {
+      background: var(--green-ink);
+      border-radius: 10px;
+      padding: 1.8rem 2.2rem;
+      margin: 2rem 0 1rem;
+    }
+    .implication-box p {
+      color: rgba(246, 227, 196,0.85);
+      margin: 0;
+      font-size: 0.97rem;
+      line-height: 1.8;
+    }
+    .implication-box strong { color: var(--mint); }
+
+    /* ── Design implications cards ── */
+    .design-impl-card {
+      background: var(--off-white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .design-impl-card .impl-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--mint);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+    .design-impl-card h5 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--green-ink);
+      margin-bottom: 0.3rem;
+    }
+    .design-impl-card p { font-size: 0.86rem; color: var(--text-muted); margin: 0; line-height: 1.65; }
+
+    /* ── Reflection band ── */
+    .oz-reflection {
+      background: var(--mint);
+      width: 100%;
+    }
+    .oz-reflection h3 { color: var(--green-ink) !important; }
+    .oz-reflection p { color: var(--green-ink) !important; line-height: 1.8; }
+
+    /* ── Publication band ── */
+    .oz-pub {
+      background: var(--green-ink);
+      width: 100%;
+    }
+    .oz-pub h3 { color: var(--mint) !important; }
+    .oz-pub p { color: rgba(246, 227, 196,0.8) !important; font-size: 0.9rem; line-height: 1.75; }
+    .oz-pub a { color: var(--mint-mid) !important; }
+
+    /* ── Global text ── */
+    .text-with-margins p.text-with-margins li { line-height: 1.8; color: var(--text-body); }
+    .text-with-margins h3 { color: var(--green-ink); font-family: 'DM Serif Display', serif; font-weight: 400; }
+    .text-with-margins h4 { color: var(--text-muted) !important; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+    }
+
+    /* ── Agentic AI — page accent. The ONLY per-page hero
+       declaration. Everything else is in case-study.css.
+       amber, darkened from #B4720E · verified >=4.5:1 as text on #FAFAF8 ── */
+    .ozchi-hero { --hero-accent: #945D0B; }
+  
+    /* Page accent on <body> so h2/h3 and the drop-cap can reach it. */
+    body { --hero-accent: #945D0B; }
+  </style>
+</head>
+
+<body>
+
+  <a href="../index.html" class="home-btn" aria-label="Back to Home">
+    <svg viewBox="0 0 24 24" class="home-icon">
+      <path d="M10 20v-6h4v6c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-8h1.55c.66 0 .99-.8.47-1.27L13.12 3.52c-.6-.56-1.53-.56-2.12 0L2.98 10.73c-.52.47-.19 1.27.47 1.27H5v8c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2z"/>
+    </svg>
+  </a>
+
+  <!-- ── HERO ── -->
+  <div class="project-hero ozchi-hero">
+    <div class="container">
+      <div class="text-with-margins">
+        <span class="badge-type">OZCHI '26 &nbsp;·&nbsp; Accepted as a long paper &nbsp;·&nbsp; Publishing November 2026</span>
+        <h1>Partial transparency beat full transparency</h1>
+        <p class="hero-sub">Agents that explained everything didn't help people catch mistakes. Agents that explained some things did.</p>
+        <div class="meta-row">
+          <div class="meta-chip"><b>60 participants</b></div>
+          <div class="meta-chip">OZCHI '26, accepted as a long paper, publishing November 2026</div>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- ══ Snapshot ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:3rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Snapshot</h2>
+          <dl class="cs-snapshot">
+            <dt>Role</dt>   <dd>Solo product design</dd>
+            <dt>Focus</dt>  <dd>Three interface concepts for agent transparency, tested with <b>60 participants</b></dd>
+            <dt>Status</dt> <dd>OZCHI '26, accepted as a long paper, publishing November 2026</dd>
+            <dt>Domain</dt> <dd>Airline customer service</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ The problem ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>The problem</h2>
+          <p>LLM agents are moving from passive assistants to systems that act on someone's behalf. They are non-deterministic and prone to silent failures, errors that look correct and arrive without warning.</p>
+          <p>Transparency is the standard proposed remedy, resting on an assumption nobody had tested in an agent context: that showing more reasoning helps people catch more mistakes.</p>
+          <p>I expected it to hold. I thought full transparency would win, and I had not considered what volume of explanation would do to someone's willingness to read it.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Three designs — the condition screenshots live here ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Three designs</h2>
+          <p>Rather than test transparency as a dial, I designed three distinct answers to <em>how much should an agent show?</em>, each drawing the line in a different place.</p>
+
+          <div class="fs-framed" style="margin-top:1.6rem;">
+            <div class="row">
+              <div class="col-12 mb-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/Agentic/Opaque.png" class="oz-condition-shot" alt="Opaque agent interface, decision only, no reasoning shown" data-aos="zoom-in" loading="lazy"></button>
+                <br>  
+                <h4 style="margin-top:0.7rem;">Opaque</h4>
+                    <p>The decision, and nothing else. What most deployed agents do today.</p>
+              </div>
+              <div class="col-12 mb-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/Agentic/Partial.png" class="oz-condition-shot" alt="Partial agent interface, factors and values shown, policy withheld" data-aos="zoom-in" loading="lazy"></button>
+                <br>  
+                <h4 style="margin-top:0.7rem;">Partial</h4>
+                    <p>The factors considered and their values, without the policy that combined them. You can see what it looked at; you can't see the rule.</p>
+              </div>
+               <div class="col-12 mb-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/Agentic/Transparent.png" class="oz-condition-shot" alt="Transparent agent interface, full reasoning and explicit policy logic" data-aos="zoom-in" loading="lazy"></button>
+                <br>  
+                <h4 style="margin-top:0.7rem;">Transparent</h4>
+                    <p>Full reasoning, factors, values, and explicit policy logic. Everything.</p>
+
+                    <p class="cs-caption">Three distinct answers to how much an agent should show.</p>
+              </div>
+               
+          </div>
+             
+          </div>
+
+          <p>The interesting boundary is between the second and third. Partial shows <em>inputs</em>; transparent shows <em>inputs and the rule</em>. That distinction turned out to matter more than the total quantity of text.</p>
+          <p>Airline customer service was chosen because it is one of the two domains in &tau;-bench, a standard benchmark for evaluating agents on multi-turn tool use under domain policy constraints, so the scenarios sit in a context the field already uses for this kind of evaluation. Three scenarios: ticket upgrade, booking change, compensation.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ What We Found ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>What We Found</h2>
+
+          <h4>Transparency improves perceived understanding, but not error detection</h4>
+          <p><strong>Complete explanations made wrong answers more convincing.</strong> Participants accepted incorrect decisions at nearly the same rate whether the agent explained everything or explained nothing. Partial transparency was the only condition that improved error detection. Fluency created an impression of reliability that survived the errors it was supposed to expose.</p>
+          <p class="cs-caption">Error detection differed across conditions, χ²(2) = 9.23, p = .009. Partial outperformed opaque; full did not.</p>
+
+          <h4 style="margin-top:2rem;">Full transparency reduces perceived negotiability</h4>
+          <p><strong>Explaining the rule made the agent feel non-negotiable.</strong> As transparency rose, users increasingly read the agent as fixed rather than open to challenge. Showing the policy behind a decision communicated that the policy was settled.</p>
+          <p class="cs-caption">Perceived steerability declined monotonically with transparency, p = .004.</p>
+
+          <h4 style="margin-top:2rem;">Transparency redirects, rather than eliminates, strategic interaction</h4>
+          <p><strong>Users didn't stop pushing, they pushed differently.</strong> Overall rates of contestation barely moved, but its composition shifted: more acceptance, less direct challenge, more probing of the framework itself.</p>
+          <p class="cs-caption">Strategy distribution differed across conditions, χ²(4) = 11.23, p = .024.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Design rules that follow ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Design rules that follow</h2>
+          <p><strong>Show factors, not policy.</strong> Disclosing what an agent considered helps people evaluate a decision. Disclosing the rule that produced it tells them the decision is closed.</p>
+          <p><strong>Design for auditing, not explanation.</strong> The goal is not for a user to understand the agent's reasoning. It is for them to be able to check it. Those need different interfaces.</p>
+          <p><strong>Treat fluency as a risk.</strong> A well-written explanation is more persuasive regardless of correctness. Anywhere an agent can be wrong, the explanation UI should preserve friction rather than remove it.</p>
+          <p><strong>Leave room to argue.</strong> If an interface makes a decision look final, users stop trying to change it, even when it's wrong and even when it could have been changed.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ What I'd build next ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>What I'd build next</h2>
+          <p><em>Concepts, not shipped work.</em></p>
+          <p><strong>Progressive disclosure with a floor.</strong> Start at partial. Let a user request the policy explicitly rather than receiving it by default, the request itself signals they're auditing rather than skimming.</p>
+          <p><strong>What-if probes.</strong> Instead of explaining the rule, let users test it: change one input and see whether the decision changes. Auditing by manipulation rather than by reading.</p>
+          <p><strong>Uncertainty without a confidence score.</strong> My RAG study found self-reported confidence doesn't move trust. An agent needs a way to signal <em>I am less sure here</em> that shows evidence rather than asserting a number.</p>
+
+          <h3>Three concepts, drawn</h3>
+          <p>These are concepts rather than shipped work. Each one takes a finding from the study and turns it into an interface decision.</p>
+          <p><strong>Progressive disclosure with a floor.</strong> The agent opens at partial transparency, factors and values, no policy. A single control reveals the rule, and the act of asking for it is the signal that someone is auditing rather than skimming. The floor matters as much as the ceiling: below partial, error detection got worse.</p>
+          <p><strong>A what-if probe.</strong> Rather than explaining the rule, the interface lets someone test it. Change one input, fare class, notice period, loyalty tier, and watch whether the decision moves. Auditing by manipulation rather than by reading, which is the difference between understanding a decision and being able to check it.</p>
+          <p><strong>Uncertainty without a score.</strong> A confidence percentage is a claim, not evidence, my RAG study found it doesn't move trust. The alternative is to show the agent's own working: which precedent it matched, how closely, and what it couldn't find. Less sure looks like thinner evidence, not a smaller number.</p>
+
+          <!-- PENDING ASSETS: these three sketches are grey stubs. Remove the
+               .pending-assets class below to reveal this group once the real
+               images are in assets/img/agentic_sketch_1..3.png. -->
+          <div class="fs-framed pending-assets" style="margin-top:1.6rem;">
+            <div class="row">
+              <div class="col-md-4 mb-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/agentic_sketch_1.png" class="oz-condition-shot" alt="PLACEHOLDER, sketch: progressive disclosure with a floor" data-aos="zoom-in" loading="lazy"></button>
+                <span class="cs-state-label">Progressive disclosure with a floor</span>
+              </div>
+              <div class="col-md-4 mb-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/agentic_sketch_2.png" class="oz-condition-shot" alt="PLACEHOLDER, sketch: what-if probe" data-aos="zoom-in" loading="lazy"></button>
+                <span class="cs-state-label">A what-if probe</span>
+              </div>
+              <div class="col-md-4 mb-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/agentic_sketch_3.png" class="oz-condition-shot" alt="PLACEHOLDER, sketch: uncertainty without a score" data-aos="zoom-in" loading="lazy"></button>
+                <span class="cs-state-label">Uncertainty without a score</span>
+              </div>
+            </div>
+            <p class="cs-caption">Three concepts, drawn. Each takes a finding from the study and turns it into an interface decision.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closing question, set as a note. -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:0; padding-bottom:0;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <div class="cs-note">
+            <p>More transparency made people feel they understood the agent better, and made them less likely to challenge it. Which of those matters more in the systems you're building?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Where this applies  +  statistics drawer  +  closing line ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%; padding-bottom:4rem;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Where this applies</h2>
+          <p>Any system where a person is meant to supervise rather than comply: code review agents, clinical decision support, content moderation tooling, financial advice. Anywhere an agent acts and a human is accountable for the outcome.</p>
+
+          <details class="cs-drawer">
+            <summary>Full method and statistics</summary>
+            <div class="cs-drawer__body">
+              <p>Within-subjects design, 60 participants with prior chatbot experience, recruited through professional networks. Three airline scenarios under three transparency conditions, order counterbalanced by Latin square.</p>
+              <p>Responses were scripted rather than live-generated, giving precise control over correctness and explanation quality at the cost of some ecological validity.</p>
+              <p>Error detection: χ²(2) = 9.23, p = .009. Partial vs. opaque Z = 110.50, p = .002, r = 0.43. Full vs. opaque p = .385.<br>
+              Steerability: χ²(2) = 7.46, p = .024. Opaque M = 3.89, transparent M = 3.26. Z = 142.50, p = .004, r = 0.40.<br>
+              Strategy: χ²(4) = 11.23, p = .024, Cramér's V = 0.24. Adversarial rates p = .281. Acceptance +15%.</p>
+              <p>Divya Ravi. 2026. <em>Seeing Inside AI Agents: How Transparency Shapes Human-Agent Interactions.</em> OZCHI '26.</p>
+            </div>
+          </details>
+          <p class="cs-caption">This page shows partial detail by default and full detail on request, which is the finding it reports.</p>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer id="footer">
+    <div class="container">
+      <div class="credits">
+        <div class="copyright">
+          <p>&copy; <script>document.write(new Date().getFullYear())</script><strong> Divya Ravi</strong></p>
+          <a style="font-size: smaller;">Designed by Divya Ravi</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="preloader" aria-hidden="true"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- PATH: vendor JS — Bootstrap 5 bundle + AOS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <!-- PATH: flow strip + group frames (shared) -->
+  <script src="assets/js/flow-strip.js?v=5"></script>
+
+  <script src="assets/js/main.js"></script>
+
+</body>
+</html>

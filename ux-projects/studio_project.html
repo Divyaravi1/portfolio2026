@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+
+  <title>TSG Quest | Divya Ravi</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+  
+  <!-- Favicons -->
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> 
+
+  <link rel="icon" href="data:,">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+
+  
+
+  <!-- Runs before any CSS. Two jobs, both fail-safe:
+       1. adds .js to <html> — [data-aos] hiding is gated on it, so if this
+          script never runs every animated element renders visible.
+       2. adds .preloader-seen on repeat visits in the same tab, so the
+          preloader is never painted on internal navigation (no flash). -->
+  <script>
+    document.documentElement.className += ' js';
+    try {
+      if (sessionStorage.getItem('dr-preloader-shown')) {
+        document.documentElement.className += ' preloader-seen';
+      }
+    } catch (e) { /* private mode / storage blocked — just show the preloader */ }
+  </script>
+  <!-- PATH: vendor CSS — Bootstrap 5, Bootstrap Icons, AOS (CDN; local vendor/ was absent) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <!-- PATH: main stylesheet -->
+  <link href="assets/css/projectstyle.css" rel="stylesheet">
+  <!-- PATH: shared case study styles — hero pattern (flow strip to follow) -->
+  <link href="assets/css/case-study.css?v=5" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playwrite+PE:wght@100..400&display=swap" rel="stylesheet">
+
+  
+
+  <style>
+
+body{
+      margin-left: 0%;
+      margin-right: 0%;
+    }
+
+
+    .playwrite-text {
+    font-family: "Playwrite PE", cursive;
+    font-optical-sizing: auto;
+    font-weight: 400; /* Adjust the weight as needed */
+    font-style: normal;
+}
+
+
+@media (max-width: 600px) {
+  .dis{
+    display: none;
+  }
+}
+
+    /* ── TSG — page accent. The ONLY per-page hero
+       declaration. Everything else is in case-study.css.
+       terracotta · verified >=4.5:1 as text on #FAFAF8 ── */
+    .tsg-hero { --hero-accent: #A34E2E; }
+  
+    /* Page accent on <body> so h2/h3 and the drop-cap can reach it. */
+    body { --hero-accent: #A34E2E; }
+  </style>
+
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-MVNYZ6Y0L4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MVNYZ6Y0L4');
+</script>
+  
+</head>
+
+<body>
+
+  
+  <a href="../index.html" class="home-btn" aria-label="Back to Home">
+  <svg viewBox="0 0 24 24" class="home-icon">
+    <path d="M10 20v-6h4v6c0 1.1.9 2 2 2h2c1.1 0 
+    2-.9 2-2v-8h1.55c.66 0 .99-.8.47-1.27L13.12 
+    3.52c-.6-.56-1.53-.56-2.12 0L2.98 10.73c-.52.47-.19 
+    1.27.47 1.27H5v8c0 1.1.9 2 2 2h2c1.1 0 
+    2-.9 2-2z"/>
+  </svg>
+</a>
+
+   <!-- Header 
+   <header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <div class="logo">
+        <a href="../index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="../index.html">Projects</a></li>
+          <li><a class="nav-link scrollto" href="../AboutMe.html">About</a></li>
+
+        </ul>-
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+
+    </div>
+    
+  </header><!-- End Header -->
+  
+
+  
+  <main id="main">
+
+<div class="project-hero tsg-hero">
+  <div class="container">
+    <div class="text-with-margins">
+
+      <span class="badge-type">UX Design Case Study &nbsp;·&nbsp; Tin Sheds Gallery</span>
+
+      <h1>Making an archive worth talking about </h1>
+
+      <p class="hero-sub">A tablet-based archive game for the Tin Sheds Gallery. Foam board and sticky notes ended it in an afternoon. What replaced it was a card game.</p>
+
+      <div class="meta-row">
+        <div class="meta-chip">Five designers, no division of labour</div>
+        <div class="meta-chip">Tin Sheds Gallery, University of Sydney</div>
+      
+      </div>
+
+    </div>
+  </div>
+</div>
+
+    <!-- ══ Snapshot ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:3rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Snapshot</h2>
+          <dl class="cs-snapshot">
+            <dt>Team</dt>   <dd>Five designers. No division of labour, research, concept, testing and iteration were done collectively.</dd>
+            <dt>Client</dt> <dd>Tin Sheds Gallery, University of Sydney</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ The brief — absorbs THE DESIGN CHALLENGE, Design Process,
+         Identifying the problem, OUR CREATIVE PROCESS ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>The brief</h2>
+          <p>The Tin Sheds Gallery has been a platform for artists and political activism since 1969. After merging into the Architecture, Design and Planning faculty, that community connection faded.</p>
+          <p>How might we use the TSG's housing archives to create genuine dialogue with youth, moving from passive display to active participation, and rebuild the gallery's role in the community?</p>
+          <p>Research surfaced three problems. Almost nobody we spoke to had heard of the TSG, often confusing it with a larger nearby gallery. The programming had narrowed toward architectural exhibits. And much of the gallery's own history was unrecorded and poorly managed.</p>
+          <p>We scoped to the housing archives and one question: how do you make an archive participatory rather than passive?</p>
+          <img src="./assets/img/studio/design-process.png" alt="design process"  data-aos="zoom-in" width="90%" loading="lazy">
+          <p class="cs-caption">Our creative process, from research through to a tested prototype.</p>
+          <br>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ What we built first — absorbs Our Initial Concept, THE ROOFS ══ -->
+    <div class="frame-bg" style="background:#FAF6F0; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>What we built first</h2>
+          <p><strong>The Roofs</strong>, three parts. A living wall of housing history updated by visitors. A tablet archive game. A workshop where students curated contributions back into the archive.</p>
+          <p>The tablet game had logins, colour-matched pairing over proximity sensors, year-by-year archive questions with two attempts each, and badges.</p>
+          <div class="fs-framed" style="margin-top:2rem;">
+                <span class="flow-strip__usecase">the version that failed</span>
+              <div class="row" style="padding-top: 20px;">
+                <div class="col-lg-4 mb-4">
+                  <img src="./assets/img/studio/sb1.png" class="img-fluid" alt="Image 1" style="border: 2px solid #000;">
+                  <p class="text-center" style="font-size: small;">Participants enter the <span class="semibold">Tin Sheds Gallery</span>  and are directed to the podium with tablets. The <span class="semibold">TIMESCAPE</span> is displayed on the walls of TSG.</p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <img src="./assets/img/studio/sb2.png" class="img-fluid" alt="Image 2" style="border: 2px solid #000;">
+                  <p class="text-center" style="font-size: small;">Participants log into <span class="semibold">the TSG Quest</span> by providing their <span class="semibold">personal details.</span></p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <img src="./assets/img/studio/sb3.png" class="img-fluid" alt="Image 3" style="border: 2px solid #000;">
+                  <p class="text-center" style="font-size: small;">The quest requires participants to be in <span class="semibold">groups</span>, and each participant has a colour <span class="semibold">flashed</span> onto their screen to allow them to find their partner. <span class="semibold">Proximity sensors</span> vibrate when they are near their pair.</p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <img src="./assets/img/studio/sb4.png" class="img-fluid" alt="Image 4" style="border: 2px solid #000;">
+                  <p class="text-center" style="font-size: small;">The tablet directs the group to a year on the timescape and gives them <span class="semibold">questions based on the archives of that year</span> as part of the quest.</p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <img src="./assets/img/studio/sb5.png" class="img-fluid" alt="Image 5" style="border: 2px solid #000;">
+                  <p class="text-center" style="font-size: small;">The questions are <span class="semibold">different per participant</span> and are used as a method of interaction between the participant and the archive, as well as a <span class="semibold">learning tool.</span></p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <img src="./assets/img/studio/sb6.png" class="img-fluid" alt="Image 6" style="border: 2px solid #000;">
+                  <p class="text-center" style="font-size: small;">Participants have 2 attempts to provide correct answer for the question. After providing the correct answers, participants are given a badge for clearing that level.</p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <img src="./assets/img/studio/sb7.png" class="img-fluid" alt="Image 7" style="border: 2px solid #000;">
+                  <p class="text-center" style="font-size: small;">Participants are then led to another year and provided with more questions</p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <img src="./assets/img/studio/sb8.png" class="img-fluid" alt="Image 8" style="border: 2px solid #000;">
+                  <p class="text-center" style="font-size: small;">If one participant does not provide the correct answer in the two attempts provided, the team will <span class="semibold">not receive the badge</span> for that year.</p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <img src="./assets/img/studio/sb9.png" class="img-fluid" alt="Image 9" style="border: 2px solid #000;">
+                  <p class="text-center" style="font-size: small;">After completing the quest, the tablet prompts the participant to <span class="semibold">leave an insight</span> to add to its records, in the form of a paragraph, sketch, voice.</p>
+                </div>
+              </div>
+              <p class="cs-caption">The tablet archive game storyboarded in full, login, colour pairing, year-by-year questions, two attempts, badges. Every mechanic here measures whether someone absorbed the archive.</p>
+              </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ How it failed — the centre of the page ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>How it failed</h2>
+          <p>We prototyped in foam board and sticky notes and tested with roughly 15 to 20 people. Three things came back:</p>
+          <ul>
+            <li><strong>No connection</strong>, not to the archive, and not to each other</li>
+            <li><strong>Boring</strong>, the questions read as homework</li>
+            <li><strong>Nothing retained</strong>, neither the content nor the experience</li>
+          </ul>
+          <p>The problem wasn't the tablet. Every mechanic we had built, scored questions, limited attempts, badges, measured whether someone had absorbed the archive. None of them gave anyone a reason to care about it.</p>
+          <img src="./assets/img/studio/user-testing.png" class="img-fluid d-block mx-auto" alt="Image" style="max-width: 100%; max-height: auto;">
+          <p class="cs-caption">Foam board and sticky notes ended the tablet concept in an afternoon.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ What replaced it — absorbs Card Game, FINAL CONCEPT, ACTION CARDS ══ -->
+    <div class="frame-bg" style="background:#FBF3EE; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>What replaced it</h2>
+          <p>A physical card game for groups of six or more.</p>
+          <p>Players take a short quiz on the TSG website beforehand and are sorted into housing archetypes. Budget-Conscious Minimalist, Adaptive Innovator, Environmentally Friendly Nomad, so they arrive with a personal lens rather than a blank one.</p>
+          <p>Cards run in three tiers, a structure borrowed from <em>We're Not Really Strangers</em>: <strong>Perception</strong> (5 minutes, creative interpretation), <strong>Connection</strong> (15 minutes, drawing parallels to personal housing experience), <strong>Reflection</strong> (20 minutes, critical response fed back into the archive wall).</p>
+          <p>The inversion is the design. The first version asked players what the archive said. The second asks what it means to them. Collecting cards still drives the game, but the archive has become the prompt for a conversation rather than the subject of a test.</p>
+          <p>We playtested the card version and it held up where the first had not, people talked to each other, and they talked about housing.</p>
+
+          <p class="cs-caption">All five cards flip. Click, or Tab to a card and press Enter or Space, both faces are reachable from the keyboard.</p>
+          <div class="row mt-4">
+              <!-- First Cell: Text Only -->
+              <div class="col-md-6 mb-4 vertical-center">
+                <div class="text-left">
+                  <p>Each turn, a player reads an Action Card and an Archive Collector Card, selects the best response, and earns that Archive Collector Card. Multiple copies are available, and the player with the most cards wins.</p>
+                   <p class="cs-caption">All five cards flip. Click, or Tab to a card and press Enter or Space, both faces are reachable from the keyboard.</p>
+                   <div class="flip-cards-text">
+                    <span style="color: #000;">Flip the cards</span>
+                    <span class="arrow">➔</span> <!-- This is the right arrow Unicode character -->
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Second Cell: Image with Text -->
+
+              <div class="col-md-6 mb-4">
+                <div class="text-center">
+                  <div class="flip-card" onclick="toggleFlip(this)">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="./assets/img/studio/information.png" alt="info card" style="width:100%; height:100%; border: 2px solid #000;" class="img-fluid">
+                      </div>
+                      <div class="flip-card-back">
+                        <img src="./assets/img/studio/info-back.png" alt="infocard" style="width:100%; height:100%; border: 2px solid #000;" class="img-fluid">
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-2 text-center">The archival information card provides context of the specific archive in discussion.</p>
+                </div>
+              </div>
+            </div>
+          <div class="row">
+              <!-- Third Cell: Image with Text -->
+              <div class="col-md-6 mb-4">
+                <div class="text-center">
+                  <div class="flip-card" onclick="toggleFlip(this)">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="./assets/img/studio/reflection.png" alt="blue card" style="width:100%; height:100%; border: 2px solid #000;" class="img-fluid">
+                      </div>
+                      <div class="flip-card-back">
+                        <img src="./assets/img/studio/reflection-back.png" alt="blue card" style="width:100%; height:100%; border: 2px solid #000;" class="img-fluid">
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-2 text-center">Reflection cards encourage critical thinking about the archives, sharing personal reactions, and integrating interactions into the online TIMESCAPE living archive [20 minutes].</p>
+                </div>
+              </div>
+        
+              <!-- Fourth Cell: Image with Text -->
+              <div class="col-md-6 mb-4">
+                <div class="text-center">
+                  <div class="flip-card" onclick="toggleFlip(this)">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="./assets/img/studio/archive.png" alt="yellow card" style="width:100%; height:100%; border: 2px solid #000;" class="img-fluid">
+                      </div>
+                      <div class="flip-card-back">
+                        <img src="./assets/img/studio/archive-back.png" alt="yellow card" style="width:100%; height:100%; border: 2px solid #000;" class="img-fluid">
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-2 text-center">The Archive card is given to the person that wins the specific round. The player with the most archive cards wins the TSG Quest.</p>
+                </div>
+              </div>
+            </div>
+          <div class="row">
+              <!-- Fifth Cell: Image with Text -->
+              <div class="col-md-6 mb-4">
+                <div class="text-center">
+                  <div class="flip-card" onclick="toggleFlip(this)">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="./assets/img/studio/connection.png" alt="red card" style="width:100%; height:100%; border: 2px solid #000;" class="img-fluid">
+                      </div>
+                      <div class="flip-card-back">
+                        <img src="./assets/img/studio/connection-back.png" alt="red card" style="width:100%; height:100%; border: 2px solid #000;" class="img-fluid">
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-2 text-center">Connection cards help players draw parallels with housing issues, uncover unspoken narratives, and deepen their understanding of the archive [15 minutes].</p>
+                </div>
+              </div>
+        
+              <!-- Sixth Cell: Image with Text -->
+              
+              <div class="col-md-6 mb-4">
+                <div class="text-center">
+                  <div class="flip-card" onclick="toggleFlip(this)">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="./assets/img/studio/perception.png" alt="orange card" style="width:100%; height:100%; border: 2px solid #000;" class="img-fluid">
+                      </div>
+                      <div class="flip-card-back">
+                        <img src="./assets/img/studio/perception-back.png" alt="orange card" style="width:100%; height:100%; border: 2px solid #000;" class="img-fluid">
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-2 text-center">Perception cards foster creative thinking to interpret and perceive the archive [5 minutes].</p>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ The prototype — absorbs Website prototype, FlowChart, StoryBoard, Video ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>The prototype</h2>
+
+          <h3 style="font-size: large;">The TSG website</h3>
+          <p>The housing archetype quiz on the TSG website categorizes visitors before they arrive, giving them a personal stake in the game. It also serves as the primary sign-up point for TSG QUEST sessions.</p>
+          <div class="icon-box mt-5">
+            <div class="figma-container" style=" padding-bottom: 20px;">
+                <iframe class="figma-embed" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2Fgc8Y8tda2FNI83XiVoOhji%2FProjects%3Fpage-id%3D1%253A2%26type%3Ddesign%26node-id%3D5-191%26viewport%3D446%252C463%252C0.06%26t%3DygktWAiurfx8zF29-1%26scaling%3Dscale-down%26mode%3Ddesign" allowfullscreen></iframe>
+            </div>
+          </div>
+
+          <div class="container padding"></div>
+          <h3>Flowchart</h3>
+          <p>From discovering the game online to contributing to the TIMESCAPE, the flowchart maps the full participant journey.</p>
+          <div class="container-fluid">
+          <img src="./assets/img/studio/flowchart.jpg" alt="flowchart" data-aos="zoom-in" width="100%" loading="lazy" data-bs-toggle="modal" data-bs-target="#lightboxModal">
+        </div>
+
+        <div class="container padding"></div>
+        <br>
+          <h3>Storyboard</h3>
+          <p>Ethan discovers the TSG Quest through a poster, takes the housing archetype quiz, signs up, and brings friends to a game night, where he realises many students share his housing anxieties. The storyboard follows his full journey from discovery to connection.</p>
+          <div class="container-fluid" style="padding-top: 30px;" >
+          <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="./assets/img/studio/story1.jpg" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">Two students walk into the Wilkinson building. Our protagonist, Ethan, is worried about being evicted. They spot a TSG Quest poster on the wall and scan the QR code to get to the website.</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/studio/story2.jpg" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%; ">
+                <div class="overlay">
+                  <div class="text">Back at home, Ethan visits the TSG website as he recollects seeing the word “housing” on the poster and decides to check it out. Out of curiosity, he takes a housing archetype quiz. </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/studio/story3.jpg" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">Ethan discovers that his housing archetype is Adaptive Innovator. He then decides to sign up for the TSG Quest game night.</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/studio/story4.jpg" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">He calls up his friends and invites them to the TSG Quest.</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/studio/story5.jpg" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">He attends the TSG Quest game night to socialise with other like-minded individuals.</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/studio/story6.jpg" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">He is sorted into a group of 6 and is given a deck of cards. This deck contains 3 types of cards. All members of the group get a white information card for each housing archive. The orange, red, and blue action cards dictate the task for each round. Yellow  archive cards are awarded to the round winner.</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/studio/story7.jpg" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">The members of the group visit the Timescape and read through the community interaction on the page.</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/studio/story8.jpg" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">Ethan realises that many students feel similarly insecure about their housing situation.</div>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+          </div>
+
+          <div class="container padding"></div>
+          <br>
+          <h3>Conceptual video</h3>
+          <p>The video we created was an attempt to advertise our intervention to the TSG audience to entice them to take part in the event.</p>
+          <div class="embed-responsive" style="margin-bottom: 50px; border-radius:5%;">
+            <video class="embed-responsive-item" width="100%" controls
+                   poster="./assets/img/studio/video-poster.png">
+              <source src="./assets/img/studio/video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closing question, set as a note. -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:0; padding-bottom:0;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <div class="cs-note">
+            <p>We stopped asking people what the archive said and started asking what it meant to them. Which one is participation?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Outcome  +  closing line ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%; padding-bottom:4rem;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Outcome</h2>
+          <p>Through this project, I have discovered the rich history of Tin Sheds Gallery, which once served as a vital platform for artists to express their opinions. It is crucial for the gallery to maintain this role, despite changes in its audience. Neglecting this heritage would be a significant loss for both the gallery and the community it once supported.</p>
+          <p>The card game was not adopted by TSG. The project was an exploration of method, how to arrive at an intervention, rather than a delivery engagement.</p>
+
+        </div>
+      </div>
+    </div>
+
+
+<div class="modal fade" id="lightboxModal" tabindex="-1" aria-labelledby="lightboxModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <img src="./assets/img/studio/flowchart.jpg" alt="flowchart">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </main>
+  <!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+    <footer id="footer">
+      <div class="container">
+        <div class="row">
+
+
+    <div class="container">
+      <div class="credits">
+        <div class="copyright">
+        <p>&copy; <script>document.write(new Date().getFullYear())</script><strong> Divya Ravi</p></strong>
+        <a style="font-size: smaller;">Designed by Divya Ravi</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <div id="preloader" aria-hidden="true"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+
+
+  <!-- PATH: vendor JS — Bootstrap 5 bundle + AOS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <!-- PATH: flow strip + group frames (shared) -->
+  <script src="assets/js/flow-strip.js?v=5"></script>
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

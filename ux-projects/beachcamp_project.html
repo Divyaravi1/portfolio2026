@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+
+  <title>Beach Camp | Divya Ravi</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+  
+  <!-- Favicons -->
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> 
+
+  <link rel="icon" href="data:,">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+
+  <!-- Runs before any CSS. Two jobs, both fail-safe:
+       1. adds .js to <html> — [data-aos] hiding is gated on it, so if this
+          script never runs every animated element renders visible.
+       2. adds .preloader-seen on repeat visits in the same tab, so the
+          preloader is never painted on internal navigation (no flash). -->
+  <script>
+    document.documentElement.className += ' js';
+    try {
+      if (sessionStorage.getItem('dr-preloader-shown')) {
+        document.documentElement.className += ' preloader-seen';
+      }
+    } catch (e) { /* private mode / storage blocked — just show the preloader */ }
+  </script>
+  <!-- PATH: vendor CSS — Bootstrap 5, Bootstrap Icons, AOS (CDN; local vendor/ was absent) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <!-- PATH: main stylesheet -->
+  <link href="assets/css/projectstyle.css" rel="stylesheet">
+  <!-- PATH: shared case study styles — hero pattern (flow strip to follow) -->
+  <link href="assets/css/case-study.css?v=5" rel="stylesheet">
+<style>
+  .sizing{
+    width: 30vw;
+  }
+
+  @media (max-width: 500px) {
+  .sizing{
+    width: 75vw; /* Make the card take the full viewport width */
+  }
+}
+
+.project-tag {
+  display: inline-block;
+  background-color: #DCE7F5;  /* blue family (was yellow #DCE7F5) */
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1B3A63;
+  margin-top: 10px;
+  letter-spacing: 0.3px;
+}
+
+    /* ── Beach Camp — page accent. The ONLY per-page hero
+       declaration. Everything else is in case-study.css.
+       coral, darkened from #2C5A9E · verified >=4.5:1 as text on #FAFAF8 ── */
+    .beach-hero { --hero-accent: #2C5A9E; }
+  
+    /* Page accent on <body> so h2/h3 and the drop-cap can reach it. */
+    body { --hero-accent: #2C5A9E; }
+  </style>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MVNYZ6Y0L4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MVNYZ6Y0L4');
+</script>
+  
+</head>
+
+<body>
+
+  
+  <a href="../index.html" class="home-btn" aria-label="Back to Home">
+  <svg viewBox="0 0 24 24" class="home-icon">
+    <path d="M10 20v-6h4v6c0 1.1.9 2 2 2h2c1.1 0 
+    2-.9 2-2v-8h1.55c.66 0 .99-.8.47-1.27L13.12 
+    3.52c-.6-.56-1.53-.56-2.12 0L2.98 10.73c-.52.47-.19 
+    1.27.47 1.27H5v8c0 1.1.9 2 2 2h2c1.1 0 
+    2-.9 2-2z"/>
+  </svg>
+</a>
+
+   <!-- Header 
+   <header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <div class="logo">
+        <a href="../index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <!--<ul>
+          <li><a class="nav-link scrollto active" href="../index.html">Projects</a></li>
+          <li><a class="nav-link scrollto" href="../AboutMe.html">About</a></li>
+
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav> 
+
+    </div>
+    
+  </header><!-- End Header -->
+  
+  
+
+
+  
+  <main id="main">
+
+<div class="project-hero beach-hero">
+  <div class="container">
+    <div class="text-with-margins">
+
+      <span class="badge-type">UX Design Case Study &nbsp;·&nbsp; Surf Life Saving Australia</span>
+
+      <h1>Redirecting risk instead of forbidding it</h1>
+
+      <p class="hero-sub">Rare collectibles only spawn at patrolled beaches. The game mechanic is the safety intervention, no warning, no signage, no lecture.</p>
+
+      <div class="meta-row">
+        <div class="meta-chip">Surf Life Saving Australia</div>
+        <div class="meta-chip">Selected from 30 entries &middot; USYD ADP Grad Show 2024</div>
+      
+      </div>
+
+    </div>
+  </div>
+</div>
+
+    <!-- ══ Snapshot ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:3rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Snapshot</h2>
+          <dl class="cs-snapshot">
+            <dt>Team</dt>    <dd>Four designers, three interface designers and one innovation designer, working across all stages together.</dd>
+            <dt>Partner</dt> <dd>Surf Life Saving Australia</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ The problem — absorbs STATISTICS, THE GOAL, Defining the problem ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>The problem</h2>
+          <p>Between 2013 and 2023, three-quarters of coastal drowning deaths in Australia happened more than a kilometre from a Surf Life Saving service. In 2022/23, 68% of those who died were aged 24 to 55, and 80% were male.</p>
+          <img src="assets/img/beach/stats.png" class="img-fluid" alt="PLACEHOLDER, coastal drowning statistics" loading="lazy" style="padding-left: 10%; padding-right: 10%; padding-top: 5%;">
+          <p>The goal was to <strong>reduce drowning deaths</strong> by shifting beach behaviour, not through more education, but by making safety feel like a choice people want to make.</p>
+          <p>Three barriers made the standard response useless.</p>
+          <div class="container mt-5 fs-framed">
+  <div class="row">
+    <div class="col-lg-4 mb-3">
+      <div class="panel">
+        <img class="img-fluid" src="./assets/img/beach/panel1.jpg" alt="Panel 1" style="border: 2px solid #000;">
+      </div>
+    </div>
+    <div class="col-lg-4 mb-3">
+      <div class="panel">
+        <img class="img-fluid" src="./assets/img/beach/panel2.jpg" alt="Panel 2" style="border: 2px solid #000;">
+      </div>
+    </div>
+    <div class="col-lg-4 mb-3">
+      <div class="panel">
+        <img class="img-fluid" src="./assets/img/beach/panel3.jpg" alt="Panel 3" style="border: 2px solid #000;">
+      </div>
+    </div>
+  </div>
+</div>
+          <h3>Overconfidence</h3>
+          <p>Beachgoers trust their own judgment and believe experience makes them capable in a crisis.</p>
+          <h3>Safety information</h3>
+          <p>Existing signage is ignored or misread.</p>
+          <h3>Education gaps</h3>
+          <p>Campaigns reach locals and miss the tourists and recent arrivals most at risk.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wave" style="background-color:#ffffff; --wave-fill:#CFDFF6; width: 100%;"></div>
+
+    <!-- ══ The reframe — absorbs Reframing, Framing the Solution, What is Beach Camp? ══ -->
+    <div class="frame-bg" style="background:#CFDFF6; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem; padding-bottom:3rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>The reframe</h2>
+          <p>Every prior intervention tried to stop people going to unpatrolled beaches. Research showed they go deliberately, for adventure, believing they already know enough.</p>
+          <p>So we stopped trying to prevent the behaviour and redirected it.</p>
+          <p>Prospect Theory holds that people are moved more by avoiding a loss than by securing a gain. Warnings offer safety. A rare card you can only get in one place creates a loss you feel by not going. Beach Camp layers AR collection over real beaches through Google Maps, and the rare collectibles exist only at patrolled ones.</p>
+          <p>Nothing in the app tells anyone not to go anywhere.</p>
+          <p>Five principles shaped every decision: usability, interactivity, educational impact, community engagement and inclusivity.</p>
+          <div class="fs-framed">
+                <div class="circle-container">
+                  <div class="circle">
+                      <img src="./assets/img/beach/design1.png" alt="Image 1">
+                  </div>
+          
+                  <div class="circle" >
+                      <img src="./assets/img/beach/design2.png" alt="Image 2">
+                      
+                  </div>
+          
+                  <div class="circle">
+                      <img src="./assets/img/beach/design3.png" alt="Image 3">
+                      
+                  </div>
+          
+                  <div class="circle">
+                      <img src="./assets/img/beach/design4.png" alt="Image 4">
+                      
+                  </div>
+          
+                  <div class="circle">
+                      <img src="./assets/img/beach/design5.png" alt="Image 5">
+                      
+                  </div>
+              </div>
+                </div>
+
+          <div class="container padding"></div>
+          <br>
+          <h3>What is Beach Camp?</h3>
+          <p>Rare collectibles only spawn at patrolled beaches. The game mechanic is the safety intervention, no warning, no signage, no lecture.</p>
+         <div class="image-text-grid mt-5">
+            <div class="row">
+              <div class="col-md-6">
+                <img src="./assets/img/beach/c1.png" alt="Image 1">
+              </div>
+              <div class="col-md-6 d-flex-center">
+                
+                <p><strong>Integration with Google Maps:</strong> Beach Camp integrates with Google Maps, allowing users to access detailed beach safety features through the SLA app when searching for beaches.
+                 <br><br>Upon entering Beach Camp via Google Maps, users see an interactive map showing patrolled and unpatrolled beaches.</p>
+            
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 order-md-2">
+                <img src="./assets/img/beach/c2.png" alt="Image 2">
+              </div>
+              <div class="col-md-6 order-md-1 d-flex-center">
+                <p><strong>User Journey and Incentivization:</strong> AR features gamify safety education through scavenger hunts for guide coins and virtual safety cards, which can be redeemed for rewards like beach essentials, promoting ongoing engagement with safety features. </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <img src="./assets/img/beach/c3.png" alt="Image 3">
+              </div>
+              <div class="col-md-6 d-flex-center">
+                <p><strong>Community Engagement and AR Gaming:</strong> The app includes social forums for each beach, enabling users to connect, share updates, and form groups as well as get important information for each specific beach.</p>
+              </div>
+            </div>
+          </div>
+         
+         
+          <!--<div class="image-text-grid mt-5 fs-framed">
+            <div class="row">
+              <div class="col-md-4 mb-4">
+                <img src="./assets/img/beach/c1.png" class="img-fluid" alt="PLACEHOLDER. Google Maps integration screen" loading="lazy">
+                <span class="cs-state-label">1 &middot; Google Maps</span>
+              </div>
+              <div class="col-md-4 mb-4">
+                <img src="./assets/img/beach/c2.png" class="img-fluid" alt="PLACEHOLDER. AR scavenger hunt screen" loading="lazy">
+                <span class="cs-state-label">2 &middot; AR collection</span>
+              </div>
+              <div class="col-md-4 mb-4">
+                <img src="./assets/img/beach/c3.png" class="img-fluid" alt="PLACEHOLDER, beach community forum screen" loading="lazy">
+                <span class="cs-state-label">3 &middot; community forum</span>
+              </div>
+            </div>
+            <!-- SCREENS 4–6 — filenames not supplied. Add here when available:
+            <div class="row">
+              <div class="col-md-4 mb-4"><img src="./assets/img/beach/c4.png" class="img-fluid" alt="" loading="lazy"><span class="cs-state-label">4</span></div>
+              <div class="col-md-4 mb-4"><img src="./assets/img/beach/c5.png" class="img-fluid" alt="" loading="lazy"><span class="cs-state-label">5</span></div>
+              <div class="col-md-4 mb-4"><img src="./assets/img/beach/c6.png" class="img-fluid" alt="" loading="lazy"><span class="cs-state-label">6</span></div>
+            </div>
+            -->
+            <p class="cs-caption">Beach Camp layers AR collection over real beaches through Google Maps.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wave" style="background-color:#CFDFF6; --wave-fill:#F4F7FB; width: 100%;"></div>
+
+    <!-- ══ The app — absorbs Application Prototype, StoryBoard, Conceptual Video, Journey Map ══ -->
+    <div class="frame-bg" style="background:#F4F7FB; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>The app</h2>
+
+          <h3>Application prototype</h3>
+          <p>Built in Figma after multiple rounds of user feedback. The prototype demonstrates AR integration, real-time safety overlays, and the community forum experience.</p>
+          <div class="icon-box mt-6">
+            <div class="figma-container">
+                <iframe class="figma-embed" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FXy60XlBQpT18IUA64AAI2g%2FBeach-Camp-Prototype%3Fpage-id%3D0%253A1%26node-id%3D513-3457%26viewport%3D277%252C1165%252C0.19%26t%3DEvUjP7epH30kP9dm-1%26scaling%3Dscale-down%26starting-point-node-id%3D200%253A167" allowfullscreen></iframe>
+            </div>
+          </div>
+
+          <div class="container padding"></div>
+          <h3>Storyboard</h3>
+          <p>Alex discovers Beach Camp via Google Maps, joins the Coogee Beach community channel, follows AR guides and ends up at a patrolled beach because that's where the rare cards are.</p>
+          <div class="container-fluid" style="padding-top: 30px;" >
+          <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="./assets/img/beach/sb1.png" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">Alex uses Google Maps to search for his destination. The app displays the beach's safety level alongside real-time weather data like the UV index and wind speed.</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/beach/sb2.png" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%; ">
+                <div class="overlay">
+                  <div class="text">Alex noticing a new feature in Google Maps, he accesses the SLS app directly for detailed beach safety information.</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/beach/sb3.png" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">In the SLS app, Alex explores different beach paths through an AR perspective. He chooses to visit Coogee Beach first.</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/beach/sb4.png"class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">Upon arrival, Alex joins the Coogee Beach community channel to receive the latest safety updates and connect with other beachgoers. </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/beach/sb5.png" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">Alex guided through the AR view based on the plan he had laid out earlier.</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/beach/sb6.png" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">Since there are fewer collection game cards on the unpatrolled beaches, he decides to head to the patrolled beaches. </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/beach/sb7.png" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">Alex will travel to the patrolled beaches to collect more rare cards through the gold collection guide provided by the AR game.</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="./assets/img/beach/sb8.png" class="d-block w-100" alt="storyboard" style="border: 2px solid #000; border-radius:5%;">
+                <div class="overlay">
+                  <div class="text">Using his camera, Alex scans different beach areas marked with safety signs and zones. The app offers virtual rewards for scanning specific locations, enhancing both fun and safety awareness.</div>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+          </div>
+
+          <div class="container padding"></div>
+          <h3>Conceptual video</h3>
+          <p>A walkthrough of Beach Camp's core mechanics, showing how the AR reward system subtly steers users away from unpatrolled beaches without ever telling them what not to do.</p>
+          <div style="width: 60%; margin: 0 auto;">
+            <div style="position: relative; /* 16:9 Aspect Ratio */ height: 0; overflow: hidden; border-radius: 5%; margin-bottom: 50px;">
+          <!--<iframe 
+              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+              src="https://www.youtube.com/embed/-gm0Pjfldnw"  title="YouTube video player" 
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowfullscreen>
+          </iframe>-->
+      </div>
+          </div>
+          <div style="width: 100%; margin: 0 auto;">
+            <div class="embed-responsive" style="margin-bottom: 50px; border-radius:5%;">
+        <video class="embed-responsive-item" width="100%" controls
+               poster="./assets/img/beach/video-poster.png">
+          <source src="./assets/img/beach/video.mov" type="video/quicktime">
+          <source src="./assets/img/beach/video.mov" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+          </div>
+
+          <div class="container padding"></div>
+          <h3>Journey map</h3>
+          <p>A 10-week development map showing how we moved from concept exploration and user research to a tested, exhibition-ready prototype, with the key pivots that shaped the final design.</p>
+          <div class="container-fluid">
+        <img src="./assets/img/beach/map.png" alt="Journey Map" data-aos="zoom-in" width="100%" loading="lazy" data-bs-toggle="modal" data-bs-target="#lightboxModal">
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ What the review flagged ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>What the review flagged</h2>
+          <p>We exhibited to Surf Life Saving and peers in week 13. Two issues came back: <strong>feasibility</strong>, and the <strong>size of the AR application</strong>, a real constraint for an app that has to work at a beach, often on patchy coverage, sometimes on older phones.</p>
+          <p>The third question was ours, and it's the one that stayed with us: how universally usable is this? An intervention that only works for people already comfortable with AR reaches the confident and misses everyone else, which is close to the demographic problem we set out to solve.</p>
+          <img src="./assets/img/beach/reviews.jpg" class="img-fluid" alt="PLACEHOLDER, exhibit review wall" loading="lazy" data-aos="zoom-in">
+          <p class="cs-caption">Feasibility and the size of the AR application were the two flags from the week 13 exhibit.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closing question, set as a note. -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:0; padding-bottom:0;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <div class="cs-note">
+            <p>The people most at risk are often the least likely to have used AR. Who does a solution like this leave out?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Outcome  +  closing line ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%; padding-bottom:4rem;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Outcome</h2>
+          <!-- Partner credit. sls.png is the Surf Life Saving mark — it belongs
+               here as attribution, not as hero decoration. -->
+          <p style="margin-bottom:1.2rem;">
+            <img src="./assets/img/beach/sls.png" alt="PLACEHOLDER. Surf Life Saving Australia mark"
+                 style="height:56px; width:auto; border:0; margin:0; display:inline-block; vertical-align:middle;">
+            <span style="margin-left:0.9rem; font-size:0.85rem; color:#55534E;">In partnership with Surf Life Saving Australia</span>
+          </p>
+          <p>Selected as the standout submission from 30 entries and nominated for the 2024 USYD ADP Graduate Showcase. Concept stage. Figma prototype, Unity demo, physical exhibit. No user testing beyond the exhibit review.</p>
+
+        </div>
+      </div>
+    </div>
+
+
+<div class="modal fade" id="lightboxModal" tabindex="-1" aria-labelledby="lightboxModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <img src="./assets/img/beach/map.png" alt="Journey Map">
+      </div>
+    </div>
+  </div>
+</div>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+    <footer id="footer">
+      <div class="container">
+        <div class="row">
+
+
+    <div class="container">
+      <div class="credits">
+        <div class="copyright">
+        <p>&copy; <script>document.write(new Date().getFullYear())</script><strong> Divya Ravi</p></strong>
+        <a style="font-size: smaller;">Designed by Divya Ravi</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <div id="preloader" aria-hidden="true"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+
+
+  <!-- PATH: vendor JS — Bootstrap 5 bundle + AOS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <!-- PATH: flow strip + group frames (shared) -->
+  <script src="assets/js/flow-strip.js?v=5"></script>
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

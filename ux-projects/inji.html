@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--
+  ==========================================================
+  EXTERNAL PATHS — update these during integration
+  ==========================================================
+  CSS   assets/css/projectstyle.css        existing site stylesheet
+  CSS   assets/css/case-study.css          shared, all five case studies
+  JS    assets/js/flow-strip.js            shared, all five case studies
+  JS    assets/js/main.js                  shared site behaviour
+  DATA  assets/data/inji-manifest.js       defines window.FLOW_MANIFEST_INJI
+  IMG   assets/img/inji/                   all screens, named per screen-naming.md
+  LINK  ../index.html                      home button
+  ==========================================================
+  Opens directly from disk. No server: the manifest is a plain script
+  assigning a global, not fetched JSON.
+-->
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>INJI Wallet | Divya Ravi</title>
+  <!-- Favicons --> 
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> 
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Runs before any CSS. Two jobs, both fail-safe:
+       1. adds .js to <html> — [data-aos] hiding is gated on it, so if this
+          script never runs every animated element renders visible.
+       2. adds .preloader-seen on repeat visits in the same tab, so the
+          preloader is never painted on internal navigation (no flash). -->
+  <script>
+    document.documentElement.className += ' js';
+    try {
+      if (sessionStorage.getItem('dr-preloader-shown')) {
+        document.documentElement.className += ' preloader-seen';
+      }
+    } catch (e) { /* private mode / storage blocked — just show the preloader */ }
+  </script>
+  <!-- PATH: vendor CSS — Bootstrap 5, Bootstrap Icons, AOS (CDN; local vendor/ was absent) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <!-- PATH: main stylesheet -->
+  <link href="assets/css/projectstyle.css" rel="stylesheet">
+  <!-- PATH: shared case study styles — hero pattern (flow strip to follow) -->
+  <link href="assets/css/case-study.css?v=5" rel="stylesheet">
+
+  <style>
+    :root {
+      --grad: linear-gradient(120deg, #DE4322 0%, #9A239A 50%, #5B03AD 100%);
+      --red:  #DE4322;
+      --purple: #5B03AD;
+      --ink:  #1a1a1a;
+      --off:  #F7F5FA;
+      --pale: #F9F9F9;
+      --muted: #6b6b6b;
+      --border: #e0e0e0;
+      --sticky: #EDE4F5;   /* violet family (was amber #EDE4F5) */
+    }
+
+    body { background: #fff; color: var(--ink); }
+    .home-btn { background: rgba(26,26,26,0.85); }
+    .home-btn:hover { background: rgba(26,26,26,0.97); }
+
+    /* ── gradient accent utility ── */
+    /* used ONLY on: hero badge, left-border accents, phase top-borders, divider line */
+
+    /* ── hero image band ── */
+    .hero-img-band { background: #F2F2F2; padding: 2rem 1rem 0; }
+
+    /* ── image placeholders ── */
+    .img-box {
+      border: 2px ;
+      border-radius: 6px;
+      border-color: #000000;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 0.82rem; font-weight: 600;
+      text-align: center; padding: 1rem;
+    }
+
+  .img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* keeps it neat */
+  border-radius: 6px; /* optional but nice */
+}
+    .img-box.hero { height: 340px; width: 100%; }
+    .img-box.tall { height: 300px; }
+    .img-box.half { height:  auto; }
+
+.img-box img {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.img-box img:hover {
+  transform: scale(1.02);
+}
+
+/* MODAL */
+.img-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  padding-top: 40px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.9);
+}
+
+/* Renamed from .modal-content — Bootstrap 5 now defines that class and was
+   overriding this lightbox image (background, border, border-radius).
+   JS targets #modalImg by id, so only CSS + markup needed changing. */
+.inji-lightbox-content {
+  display: block;
+  margin: auto;
+
+  max-width: 90vw;
+  max-height: 90vh;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+}
+
+    /* ── callout boxes ── */
+    /* gradient used only on the left border — everything else neutral */
+    .accent-box {
+      background: var(--pale);
+      border-left: 4px solid transparent;
+      border-left-color: var(--hero-accent);
+      border-radius: 0 4px 4px 0;
+      padding: 1.4rem 1.8rem;
+      margin-top: 1.5rem;
+    }
+    .white-box {
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 4px; padding: 1.4rem 1.8rem; margin-top: 1.5rem;
+    }
+    .sesmag-box {
+      background: #fff; border: 1.5px solid var(--border);
+      border-left: 4px solid transparent;
+      border-left-color: var(--hero-accent);
+      border-radius: 0 4px 4px 0;
+      padding: 1.4rem 1.8rem; margin-top: 1.5rem;
+    }
+
+    /* ── role pills — neutral, gradient only on hover ── */
+    .role-list { display: flex; flex-wrap: wrap; gap: 0.6rem; padding: 0; list-style: none; margin: 0.5rem 0 0; }
+    .role-list li {
+      background: #111; color: #fff;
+      font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 600;
+      padding: 0.35rem 0.9rem; border-radius: 20px;
+    }
+
+    /* ── tag pills ── */
+    .tag-pill {
+      display: inline-block; background: #111; color: #fff;
+      font-size: 0.76rem; font-weight: 700;
+      padding: 0.22rem 0.72rem; border-radius: 3px;
+      margin: 0.2rem 0.15rem 0 0;
+    }
+    .sesmag-pill {
+      display: inline-block;
+      background: var(--hero-accent);
+      color: #fff;
+      font-size: 0.76rem; font-weight: 700;
+      padding: 0.25rem 0.8rem; border-radius: 3px; margin-bottom: 0.8rem;
+    }
+
+    /* ── numbered headings ── */
+
+    /* ── bands — all neutral ── */
+
+    /* ── phase strip ── */
+
+    /* ── image-text rows ── */
+
+    @media (max-width: 768px) {
+    }
+
+    /* ── Inji — page accent. The ONLY per-page hero
+       declaration. Everything else is in case-study.css.
+       deep indigo · verified >=4.5:1 as text on #FAFAF8 ── */
+    .inji-hero { --hero-accent: #3B0A6B; }
+
+    /* ── Brand gradient — the <h1> hero title ONLY ──────────────
+       Background-clipped text fill. Solid var(--hero-accent) is the declared
+       value; the gradient is applied only where background-clip:text
+       is supported, so the title is never unreadable. Nothing else on
+       the page carries the gradient, and it never touches body text. */
+    .inji-hero h1 { color: var(--hero-accent); }
+    @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+      .inji-hero h1 {
+        background: var(--grad);
+        -webkit-background-clip: text;
+                background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+      }
+    }
+
+    /* Monochrome violet family — retint anything that was a stray hue */
+    #main a               { color: var(--hero-accent); }
+    .accent-box.sesmag-box           { border-image: none; border-left: 4px solid var(--hero-accent); }
+    .role-list li.tag-pill             { background: #2F0159; }
+    .sesmag-pill          { background: var(--hero-accent); }
+  
+    /* Page accent on <body> so h2/h3 and the drop-cap can reach it. */
+    body {
+      --hero-accent: #3B0A6B;        /* deeper, less vivid; 13.94:1 as text on paper */
+      --accent-text: #3B0A6B;        /* the split collapsed: the new accent is dark enough to be type */
+    }
+
+    /* Two roles, kept apart. Heading and link text takes the darker violet;
+       every tint, border and divider takes the accent at 6–10%. Nothing but
+       heading text carries the accent at full strength — the <h1> gradient
+       is the single exception. */
+    #main h2,
+    #main .text-with-margins h3,
+    #main a               { color: var(--accent-text); }
+    #main a:hover         { color: var(--hero-accent); }
+    .accent-box.sesmag-box           { border-left-color: color-mix(in srgb, var(--hero-accent) 45%, transparent); }
+    .cs-drawer            { border-color: color-mix(in srgb, var(--hero-accent) 30%, transparent); }
+    .role-list li.tag-pill             { background: color-mix(in srgb, var(--hero-accent) 10%, transparent); color: var(--accent-text); }
+    .sesmag-pill          { background: color-mix(in srgb, var(--hero-accent) 10%, transparent); color: var(--accent-text); }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" class="home-btn" aria-label="Back to Home">
+    <svg viewBox="0 0 24 24" class="home-icon">
+      <path d="M10 20v-6h4v6c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-8h1.55c.66 0 .99-.8.47-1.27L13.12 3.52c-.6-.56-1.53-.56-2.12 0L2.98 10.73c-.52.47-.19 1.27.47 1.27H5v8c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2z"/>
+    </svg>
+  </a>
+
+  <main id="main">
+
+    <!-- ── HERO ── -->
+    <div class="project-hero inji-hero">
+      <div class="container">
+        <div class="text-with-margins">
+          <span class="badge-type">Inji Wallet &nbsp;·&nbsp; MOSIP &nbsp;·&nbsp; Open source &nbsp;·&nbsp; Contributed at Infosys</span>
+          <h1>Designing consent when you own less and less of the screen</h1>
+          <p class="hero-sub">Four surfaces in a credential wallet, ordered by how much of each I controlled. By the last one, the browser and the operating system have already asked the user twice before my screen loads.</p>
+          <div class="meta-row">
+            <div class="meta-chip">Android and iOS</div>
+            <div class="meta-chip">Verifiable credentials</div>
+            <div class="meta-chip">Digital public infrastructure</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 2. SNAPSHOT ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Snapshot</h2>
+          <dl class="cs-snapshot">
+            <dt>Role</dt>     <dd>Lead Experience Designer, Infosys</dd>
+            <dt>Platform</dt> <dd>Android and iOS. DC API work is Android only.</dd>
+            <dt>Focus</dt>    <dd>Consent and sharing flows, credential status, component states, and inclusive onboarding</dd>
+          </dl>
+          <p>Inji is adopted and customised by implementing countries. My designs ship as the open-source default that implementers inherit or override. I am setting the floor, not the final experience in any one country.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ 3. WHAT THIS IS ══ -->
+    <div class="frame-bg" style="background:#F7F5FA; width:100%; padding-bottom:40px;">
+      <div class="container padding" style="padding-top:50px;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>What this is</h2>
+
+          <p>The closest familiar thing is Apple Wallet or Google Wallet, holding credentials like a national ID or degree, issued by any government or institution, working offline under no single company's control.</p>
+          <p>Three parties, with the wallet in the middle:</p>
+          <ul>
+            <li><strong>The issuer</strong>, a government, a university, an insurer, signs a credential and sends it to a holder.</li>
+            <li><strong>The holder</strong>, the person, in the wallet.</li>
+            <li><strong>The verifier</strong>, a clerk, a guard, a pharmacist, a website, asks for part of it and checks the signature.</li>
+          </ul>
+
+          <!-- Inline SVG — issuer / holder / verifier. Replaces inji_orientation_diagram_parties.png. -->
+          <div class="cs-diagram fs-framed">
+            <svg class="cs-diagram__wide" viewBox="0 0 610 126" role="img" aria-labelledby="parties-w-t parties-w-d">
+              <title id="parties-w-t">Issuer, holder and verifier</title>
+              <desc id="parties-w-d">The issuer signs and sends a credential to the holder. The verifier asks the holder and checks the signature, the arrow every decision on this page concerns.</desc>
+              <!-- Boxes sized to their label (150 wide, 56 tall), not the
+                   old fixed 200/64 — gaps between them (56) are unchanged
+                   from before, so the arrows just read as longer now.
+                   Descriptions wrap to two lines at this width. -->
+              <line class="arrow arrow--dim" x1="174" y1="52" x2="224" y2="52"/>
+              <line class="arrow arrow--dim" x1="216" y1="46" x2="224" y2="52"/>
+              <line class="arrow arrow--dim" x1="216" y1="58" x2="224" y2="52"/>
+              <text class="arrow-label" x="202" y="14">signs and sends</text>
+              <line class="arrow arrow--strong" x1="380" y1="52" x2="430" y2="52"/>
+              <line class="arrow arrow--strong" x1="422" y1="46" x2="430" y2="52"/>
+              <line class="arrow arrow--strong" x1="422" y1="58" x2="430" y2="52"/>
+              <text class="arrow-label" x="408" y="14">asks, and checks the signature</text>
+              <rect class="node-box" x="24"  y="24" width="150" height="56" rx="8"/>
+              <rect class="node-box" x="230" y="24" width="150" height="56" rx="8"/>
+              <rect class="node-box" x="436" y="24" width="150" height="56" rx="8"/>
+              <text class="node-title" x="99"  y="57">Issuer</text>
+              <text class="node-title" x="305" y="57">Holder</text>
+              <text class="node-title" x="511" y="57">Verifier</text>
+              <text class="node-sub" x="99"  y="96">government,<tspan x="99" dy="13">university, insurer</tspan></text>
+              <text class="node-sub" x="305" y="96">the person,<tspan x="305" dy="13">in the wallet</tspan></text>
+              <text class="node-sub" x="511" y="96">clerk, guard,<tspan x="511" dy="13">pharmacist, website</tspan></text>
+            </svg>
+            <svg class="cs-diagram__narrow" viewBox="0 0 280 400" role="img" aria-labelledby="parties-n-t parties-n-d">
+              <title id="parties-n-t">Issuer, holder and verifier</title>
+              <desc id="parties-n-d">The issuer signs and sends a credential to the holder. The verifier asks the holder and checks the signature, the arrow every decision on this page concerns.</desc>
+              <!-- each node: box (60px) + subtitle line (18px clearance) + a
+                   clear gap before the arrow starts, so the label never sits
+                   inside the same band as the subtitle above it -->
+              <line class="arrow arrow--dim" x1="130" y1="100" x2="130" y2="148"/>
+              <line class="arrow arrow--dim" x1="124" y1="138" x2="130" y2="148"/>
+              <line class="arrow arrow--dim" x1="136" y1="138" x2="130" y2="148"/>
+              <text class="arrow-label" x="175" y="128">signs and sends</text>
+              <line class="arrow arrow--strong" x1="130" y1="248" x2="130" y2="296"/>
+              <line class="arrow arrow--strong" x1="123" y1="286" x2="130" y2="296"/>
+              <line class="arrow arrow--strong" x1="137" y1="286" x2="130" y2="296"/>
+              <text class="arrow-label" x="175" y="276">asks, and checks the signature</text>
+              <rect class="node-box" x="20" y="10"  width="220" height="60" rx="8"/>
+              <rect class="node-box" x="20" y="158" width="220" height="60" rx="8"/>
+              <rect class="node-box" x="20" y="306" width="220" height="60" rx="8"/>
+              <text class="node-title" x="130" y="45">Issuer</text>
+              <text class="node-title" x="130" y="193">Holder</text>
+              <text class="node-title" x="130" y="341">Verifier</text>
+              <text class="node-sub" x="130" y="88">government, university, insurer</text>
+              <text class="node-sub" x="130" y="236">the person, in the wallet</text>
+              <text class="node-sub" x="130" y="384">clerk, guard, pharmacist, website</text>
+            </svg>
+          </div>
+
+          <details class="cs-drawer">
+            <summary>Who uses it, why the stakes differ, and what the standards fix</summary>
+            <div class="cs-drawer__body">
+          <h3>Who uses it</h3>
+          <p><strong>Holders</strong> may be meeting a digital credential for the first time, on an older or shared device, despite years of smartphone use.</p>
+          <p><strong>Verifiers</strong> are usually mid-task, seconds not minutes; a credential nobody will accept is not a credential.</p>
+
+          <h3>Why the stakes differ</h3>
+          <p>This is public infrastructure, not a consumer app. A failed credential share is not a bad experience; it is a service not received. Someone doesn't collect a payment, doesn't enrol, doesn't get seen.</p>
+          <p>That changes what a design failure costs, and who absorbs it. The users most likely to hit an edge case are the users least able to survive one.</p>
+
+          <h3>Standards set the shape</h3>
+          <p>OpenID4VP, SD-JWT, and the W3C Verifiable Credentials data model govern how a credential is presented, shared, and structured. These specifications fix the steps and their order.</p>
+          <p><strong>One vocabulary decision:</strong> the specifications call these pieces <em>claims</em>; the interface calls them <strong>information</strong> throughout.</p>
+          <p>A credential is only worth what a verifier will accept, and a wallet is only worth what its holder understands well enough to consent to.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ 5. DECIDING HOW MUCH IS TOO MUCH TO SHARE AT ONCE ══ -->
+    <div class="frame-bg" style="background:#fffefb; width:100%; padding-bottom:40px;">
+      <div class="container padding" style="padding-top:50px;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Deciding how much is too much to share at once</h2>
+          <p class="cs-subline">DC API and DCQL, two ways a verifier can ask</p>
+          <br>
+          <!-- Inline SVG — the routing fork. Replaces inji_dcapi_diagram_fork.png. -->
+          <div class="cs-diagram fs-framed">
+            <svg class="cs-diagram__wide" viewBox="0 0 720 320" role="img" aria-labelledby="fork-w-t fork-w-d">
+              <title id="fork-w-t">Routing fork by credential count</title>
+              <desc id="fork-w-d">A request arrives and asks how many credentials are involved. Three or fewer routes to instant sharing, which fits a glance with no interruption. More than three opens the app, a full screen that can be reviewed. Proposed, not implemented.</desc>
+              <!-- Orthogonal elbow connectors, not curves — matches the
+                   flow-strip connector style: 90 degree corners, 8px radius,
+                   round caps. The trunk runs from the decision node to
+                   x=390, splits into an upper and lower branch, then a
+                   final straight run carries each into its target box with
+                   the arrowhead flush at x=470. Both branch labels sit
+                   centred over that final run, single line. -->
+              <line class="arrow arrow--plain" x1="150" y1="160" x2="200" y2="160"/>
+              <line class="arrow arrow--plain" x1="192" y1="154" x2="200" y2="160"/>
+              <line class="arrow arrow--plain" x1="192" y1="166" x2="200" y2="160"/>
+              <path class="arrow arrow--elbow" d="M370,160 L382,160 A8,8 0 0 0 390,152 L390,84 A8,8 0 0 1 398,76 L470,76"/>
+              <line class="arrow arrow--elbow" x1="462" y1="70" x2="470" y2="76"/>
+              <line class="arrow arrow--elbow" x1="462" y1="82" x2="470" y2="76"/>
+              <text class="arrow-label" x="434" y="62">3 or fewer</text>
+              <path class="arrow arrow--elbow" d="M370,160 L382,160 A8,8 0 0 1 390,168 L390,236 A8,8 0 0 0 398,244 L470,244"/>
+              <line class="arrow arrow--elbow" x1="462" y1="238" x2="470" y2="244"/>
+              <line class="arrow arrow--elbow" x1="462" y1="250" x2="470" y2="244"/>
+              <text class="arrow-label" x="434" y="230">more than 3</text>
+              <rect class="node-box" x="0"   y="132" width="150" height="56" rx="8"/>
+              <rect class="node-box" x="200" y="128" width="170" height="64" rx="8"/>
+              <rect class="node-box" x="470" y="40"  width="210" height="72" rx="8"/>
+              <rect class="node-box" x="470" y="208" width="210" height="72" rx="8"/>
+              <text class="node-title" x="75"  y="165">Request arrives</text>
+              <text class="node-title" x="285" y="152">How many</text>
+              <text class="node-title" x="285" y="168">credentials?</text>
+              <text class="node-title" x="575" y="68">Instant sharing</text>
+              <text class="node-sub"   x="575" y="88">fits a glance, no interruption</text>
+              <text class="node-title" x="575" y="236">Open the app</text>
+              <text class="node-sub"   x="575" y="256">full screen, reviewable</text>
+              <text class="diagram-note" x="680" y="300" text-anchor="end">proposed, not implemented</text>
+            </svg>
+            <svg class="cs-diagram__narrow" viewBox="0 0 260 430" role="img" aria-labelledby="fork-n-t fork-n-d">
+              <title id="fork-n-t">Routing fork by credential count</title>
+              <desc id="fork-n-d">A request arrives and asks how many credentials are involved. Three or fewer routes to instant sharing, which fits a glance with no interruption. More than three opens the app, a full screen that can be reviewed. Proposed, not implemented.</desc>
+              <line class="arrow arrow--plain" x1="130" y1="70"  x2="130" y2="106"/>
+              <line class="arrow arrow--plain" x1="124" y1="96" x2="130" y2="106"/>
+              <line class="arrow arrow--plain" x1="136" y1="96" x2="130" y2="106"/>
+              <line class="arrow arrow--plain" x1="130" y1="170" x2="130" y2="206"/>
+              <line class="arrow arrow--plain" x1="124" y1="196" x2="130" y2="206"/>
+              <line class="arrow arrow--plain" x1="136" y1="196" x2="130" y2="206"/>
+              <text class="arrow-label" x="185" y="192">3 or fewer</text>
+              <line class="arrow arrow--plain" x1="130" y1="280" x2="130" y2="316"/>
+              <line class="arrow arrow--plain" x1="124" y1="306" x2="130" y2="316"/>
+              <line class="arrow arrow--plain" x1="136" y1="306" x2="130" y2="316"/>
+              <text class="arrow-label" x="185" y="302">more than 3</text>
+              <rect class="node-box" x="42" y="10"  width="176" height="60" rx="8"/>
+              <rect class="node-box" x="42" y="110" width="176" height="60" rx="8"/>
+              <rect class="node-box" x="42" y="210" width="176" height="70" rx="8"/>
+              <rect class="node-box" x="42" y="320" width="176" height="70" rx="8"/>
+              <text class="node-title" x="130" y="45">Request arrives</text>
+              <text class="node-title" x="130" y="145">How many credentials?</text>
+              <text class="node-title" x="130" y="242">Instant sharing</text>
+              <text class="node-sub"   x="130" y="262">fits a glance, no interruption</text>
+              <text class="node-title" x="130" y="352">Open the app</text>
+              <text class="node-sub"   x="130" y="372">full screen, reviewable</text>
+              <text class="diagram-note" x="218" y="415" text-anchor="end">proposed, not implemented</text>
+            </svg>
+          </div>
+
+          <h3>What testing showed</h3>
+          <p class="cs-gloss">DC API, the browser-and-OS route that shares a credential without opening the wallet. DCQL, the query language a verifier uses to specify which credential and which information it needs.</p>
+          <br>
+          <p>Inji supports two ways of sharing, fast instant sharing at the OS level and a fuller in-app review, treated in testing as one decision rather than two capabilities.</p>
+          <p>Testing here was informal and internal, observations rather than numbers; where I make a claim below, it's an observation.</p>
+          <p>A cluster of related problems came back, all about volume rather than wording:</p>
+          <ul>
+            <li>Consent screens became unreadable once a request covered several credentials</li>
+            <li>Users had to scroll to see everything being shared, and most didn't</li>
+            <li>Nobody could reliably say what a verifier would receive after completing a multi-credential request</li>
+          </ul>
+          <p>The underlying issue: <strong>consent that requires scrolling isn't consent.</strong> Someone who taps accept without reaching the bottom has technically consented, not actually. Past some threshold, the surface can't carry the decision it's asking for.</p>
+          <br>
+
+          <h3>The instant-sharing flow</h3>
+          <p class="cs-gloss">Sharing a credential without opening the Inji wallet app.</p>
+          
+          <!-- FLOW STRIP — dcapi-flow -->
+          <div class="flow-strip-mount"
+               data-manifest="FLOW_MANIFEST_INJI"
+               data-strip="dcapi-flow"
+               data-img-base="assets/img/inji/"></div>
+
+          <p>What it adds is control. The OS picker establishes <em>which credential</em>; my screen establishes <em>which information within it</em>, the one thing the OS surface can't offer.</p>
+
+          <h3>The in-app flow</h3>
+          <p class="cs-gloss">Sharing credentials through the app.</p>
+          
+          <!-- FLOW STRIP — dcql-flow, then the ambiguous-request edge-case group -->
+          <div class="flow-strip-mount"
+               data-manifest="FLOW_MANIFEST_INJI"
+               data-strip="dcql-flow"
+               data-img-base="assets/img/inji/"></div>
+          <div class="flow-strip-mount"
+               data-manifest="FLOW_MANIFEST_INJI"
+               data-strip="dcql-usecase-edgecases"
+               data-img-base="assets/img/inji/"></div>
+
+          <h3>What I've proposed</h3>
+          <p><em>This has been designed, not shipped. The instant-sharing work has been handed to development and is expected in the next release.</em></p>
+          <p>Route by volume: three credentials or fewer go through instant sharing, where speed is the point; more opens the app, where the request can be reviewed properly.</p>
+          <p>Comprehension broke down between three and five credentials in testing. I'd set the threshold at three and validate it from instrumentation, not judgment.</p>
+          <p>The protocol appears to permit the handoff, a wallet declining an instant request and escalating into the app. That path isn't implemented yet; confirming it works is the first thing I'd want engineering to check.</p>
+          <p>The cost is real, every request that crosses the threshold becomes an interruption, but a consent flow that is fast and not understood has failed at the only thing it exists to do.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ 6. MAKING "YOU HAVE NO CHOICE ABOUT THIS" VISIBLE ══ -->
+    <div class="frame-bg" style="background:#fffefb; width:100%; padding-bottom:40px;">
+      <div class="container padding" style="padding-top:50px;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Showing what's optional and what isn't</h2>
+          <p class="cs-subline">SD-JWT selective disclosure</p>
+
+          <p>When a verifier asks for a credential, not every piece of information in the request works the same way. Some is mandatory, refuse it and the share fails. Some is genuinely yours to withhold. And some is sent automatically unless you turn it off.</p>
+          <p>Three different things, and nothing on the screen told them apart.</p>
+
+          <h3>The first version</h3>
+          <p>One long scrolling list of every field, with the automatic ones greyed out.</p>
+          <p>Greying something out says you can't change this. It doesn't say why. Someone looking at a dimmed field has no way to know whether the verifier requires it, whether it's broken, or whether they switched it off themselves earlier. The list had no sections and no labels, it implied a hierarchy without ever naming one.</p>
+
+          <!-- FLOW STRIP — sdjwt-web; replaces the old before/after pair.
+               Landscape, 2 across, so four screens page 2+2 and the arrows
+               and connector appear. Screen 4 is the rejected greyed-out
+               version, sitting last on page two as the contrast case. -->
+          <div class="flow-strip-mount"
+               data-manifest="FLOW_MANIFEST_INJI"
+               data-strip="sdjwt-web"
+               data-img-base="assets/img/inji/"></div>
+
+          <h3>The version that shipped</h3>
+          <p>Two labelled groups instead of one list: Required, and Shared by default. Each group carries one line saying what that means for the person sharing, not what it means in the specification.</p>
+          <p>Grouping does the work greying couldn't. You don't need to know what SD-JWT is to understand <em>this part is the verifier's condition, this part is your choice, this part goes unless you stop it.</em></p>
+          <p>The image bellow shows a detailed view of the rejected design.</p>
+
+          <!-- ANCHORED DETAIL — crop of the shipped screen above; the former
+               full-screen companion (inji_sdjwt_detail_full.png) duplicated
+               inji_sdjwt_shipped_grouped.png and was removed. -->
+          <div class="cs-anchored fs-framed">
+            <img src="./assets/img/inji/inji_sdjwt_detail_crop.png" class="img-fluid" alt="PLACEHOLDER, crop of the grouping treatment" loading="lazy" onclick="openModal(this)">
+            <p class="cs-caption">display of the scrolling wall of fields for selection during credential sharing. The lack of labels and lack of sorting makes it harder to select for users. Another proposed idea (on the backend) would be to prioritise the fields based on importance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ 7. A STATUS THE SYSTEM CANNOT EXPLAIN ══ -->
+    <div class="frame-bg" style="background:#F7F5FA; width:100%; padding-bottom:40px;">
+      <div class="container padding" style="padding-top:50px;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>A status the system cannot explain</h2>
+          <p class="cs-subline">Credential states</p>
+
+          <p>The wallet shows four states: valid, pending, expired, and revoked.</p>
+          <p>Three of them are self-explanatory. <strong>Revoked</strong> is not, and matters most: it's the only state implying something went wrong rather than something ran out.</p>
+
+          <h3>The constraint</h3>
+          <p>The issuer knows why a credential was revoked; the wallet never learns it, so it can only show the word <em>revoked</em>, an accusation with no explanation or appeal.</p>
+
+          <h3>What I did, and what I couldn't</h3>
+          <p>I could make the state legible: distinguish revoked from expired, avoid alarm styling that blames the holder, and point toward the issuer rather than a dead end. I couldn't make it explainable, that requires the reason to travel with the revocation, a change to what issuers send.</p>
+          <p><strong>This is the kind of problem that resolves upward.</strong> The right design existed; it just wasn't a design problem. Recognising which of those you have is most of the job.</p>
+
+          <h3>The states as designed</h3>
+          <p>Four states, one visual system. Valid and pending share a neutral treatment because neither requires action. Expired and revoked both block a share, but only one implies fault, so expired reads as a lapsed date and revoked as a status change, without the red-alert styling that would tell a holder they had done something wrong. The difference between the two is carried by label and hierarchy rather than by colour, because colour alone would not survive the range of devices and display settings this ships to.</p>
+
+          <div class="cs-stateset fs-framed">
+            <div class="row">
+              <div class="col-6 col-md-3">
+                <img style="max-height: 82%;" src="./assets/img/inji/valid.png" alt="PLACEHOLDER, valid credential state" loading="lazy" onclick="openModal(this)">
+              </div>
+              <div class="col-6 col-md-3">
+                <img src="./assets/img/inji/pening.png" alt="PLACEHOLDER, pending credential state" loading="lazy" onclick="openModal(this)">
+              </div>
+              <div class="col-6 col-md-3">
+                <img src="./assets/img/inji/expired.png" alt="PLACEHOLDER, expired credential state" loading="lazy" onclick="openModal(this)">
+              </div>
+              <div class="col-6 col-md-3">
+                <img src="./assets/img/inji/revoked.png" alt="PLACEHOLDER, revoked credential state" loading="lazy" onclick="openModal(this)">
+              </div>
+            </div>
+            <p class="cs-caption">Revoked is the only state that implies something went wrong rather than something ran out.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ 8. DESIGNING FOR SOCIO-ECONOMIC DIFFERENCE ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%; padding-bottom:40px;">
+      <div class="container padding" style="padding-top:50px;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Designing for socio-economic difference</h2>
+          <p class="cs-subline">SESMAG, the Socio-Economic Magnifier</p>
+
+          <p>SESMAG is a formal inclusive-design method evaluating an interface against socio-economic difference, data reliability, device age, and digital experience. That cost matters more here, a failed credential share may mean a low-income user not receiving a service.</p>
+          <p>I ran a SESMAG analysis of the wallet's onboarding, in a workshop led by a visiting researcher.</p>
+
+          <h3>What it changed</h3>
+          <details class="cs-drawer">
+            <summary>Four findings and what changed</summary>
+            <div class="cs-drawer__body">
+
+          <p><strong>Finding:</strong> The language control, a bare globe icon, was not evident to users unfamiliar with technology.<br>
+          <strong>Change:</strong> Added an explanatory label and made the symbol customisable for local context.</p>
+
+          <p><strong>Finding:</strong> New visitors did not find the language setting before beginning.<br>
+          <strong>Change:</strong> Shipped a persistent dropdown instead of a first-visit popup, whose cookie-dependent trigger was the least reliable thing to rely on.</p>
+
+          <p><strong>Finding:</strong> Users expected their language choice to carry into everything the wallet handed them to, it does not.<br>
+          <strong>Change:</strong> Added a warning that language settings do not apply to third-party services.</p>
+
+          <p><strong>Finding:</strong> Landing-page arrivals had no orientation, and no way to recover it once dismissed.<br>
+          <strong>Change:</strong> Extended the tour into the wallet with a reactivation control, since the people likeliest to need it are likeliest to dismiss it by accident.</p>
+
+          <!-- Final shipped versions only, web, expandable — no before
+               shots, no bubbles. Click any tile to open it in the
+               lightbox. -->
+          <div class="cs-stateset fs-framed">
+            <div class="row">
+              <div class="col-12 col-md-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/inji/inji_sesmag_language.png" class="img-fluid" alt="PLACEHOLDER, language control, shipped" loading="lazy"></button>
+              </div>
+              <div class="col-12 col-md-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/inji/inji_sesmag_thirdparty.png" class="img-fluid" alt="PLACEHOLDER, third-party language warning, shipped" loading="lazy"></button>
+              </div>
+              <div class="col-12 col-md-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/inji/inji_sesmag_tour.png" class="img-fluid" alt="PLACEHOLDER, onboarding tour with reactivation, shipped" loading="lazy"></button>
+              </div>
+            </div>
+            <p class="cs-caption">The three changes, as shipped.</p>
+          </div>
+
+            </div>
+          </details>
+          <h3>The one that generalised</h3>
+          <p>The third-party language warning is the same problem as instant sharing, one layer down.</p>
+          <p>In both cases the user makes a choice in our product, gets handed to a surface we do not control, and that surface ignores the choice. I solved it once for language and once for consent before noticing they were the same thing.</p>
+          <p><strong>Where you own part of a flow and not the rest, the boundary is what needs designing</strong>, not either side of it.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ 9. WHAT DIDN'T WORK ══ -->
+    <div class="frame-bg" style="background:#F7F5FA; width:100%; padding-bottom:40px;">
+      <div class="container padding" style="padding-top:50px;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>What didn't work</h2>
+          <p><strong>An assumption about what users understand.</strong> The language prompt was proposed on the reasonable-sounding basis that first-time visitors should be told about a setting they won't find. What that assumed was a user who understands cookies well enough for cookie-dependent behaviour to feel coherent. Most people don't, and a prompt that appears inconsistently for reasons nobody can see is worse than no prompt. It became a dropdown.</p>
+          <p><strong>A design that lost to the release window.</strong> A preview of what a verifier would receive, the request rendered before consent rather than described, was cut because it could not be built in time. It is the single change most likely to fix the comprehension problem in Decision 1, and it is scheduled for the next release. What shipped instead was the labelled grouping, which makes the <em>structure</em> of a request legible even when its <em>contents</em> still aren't.</p>
+          <p>I would rather have had the preview. Grouping was the version that could exist this cycle, and it was worth protecting rather than waiting.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Closing question, set as a note. -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:0; padding-bottom:0;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <div class="cs-note">
+            <p>Consent takes time, and the people giving it are usually in a hurry. Where should that trade-off sit?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 10. ALSO IN PROGRESS ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%; padding-bottom:40px;">
+      <div class="container padding" style="padding-top:50px;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Also designed</h2>
+          <details class="cs-drawer">
+            <summary>Three further pieces in design development</summary>
+            <div class="cs-drawer__body">
+          <p>Three further pieces of interface work, currently in design development: a redesign of wallet login, multi-account support with profile switching, and a landing page redesign. These are product decisions without a research programme behind them, the everyday half of the role.</p>
+
+          <!-- PENDING ASSETS: these three screens are grey stubs. Remove the
+               .pending-assets class below to reveal this group once the real
+               images are in assets/img/inji/inji_inprogress_*.png. -->
+          <div class="cs-stateset fs-framed pending-assets" style="margin-top:1.6rem;">
+            <div class="row">
+              <div class="col-md-4 mb-4">
+                <img src="./assets/img/inji/inji_inprogress_login.png" alt="PLACEHOLDER, wallet login redesign" loading="lazy" onclick="openModal(this)">
+                <span class="cs-state-label">Wallet login</span>
+              </div>
+              <div class="col-md-4 mb-4">
+                <img src="./assets/img/inji/inji_inprogress_accounts.png" alt="PLACEHOLDER, multi-account support with profile switching" loading="lazy" onclick="openModal(this)">
+                <span class="cs-state-label">Multi-account</span>
+              </div>
+              <div class="col-md-4 mb-4">
+                <img src="./assets/img/inji/inji_inprogress_landing.png" alt="PLACEHOLDER, landing page redesign" loading="lazy" onclick="openModal(this)">
+                <span class="cs-state-label">Landing page</span>
+              </div>
+            </div>
+            <p class="cs-caption">Three further pieces of interface work, in design development.</p>
+          </div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ 11. OUTCOME  +  12. CLOSING LINE ══ -->
+    <div class="frame-bg" style="background:#F7F5FA; width:100%; padding-bottom:60px;">
+      <div class="container padding" style="padding-top:50px;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Outcome</h2>
+          <p>Contributed to the credential status and language rendering work released in <strong>Inji Mobile Wallet v0.22.0, March 2026</strong>, the release notes list improved credential status visibility, language rendering improvements, updated credential offer trust UI, and UI alignment across credential and settings screens.</p>
+          <p>The instant-sharing work has been handed to development and is expected in the next release, along with the request preview.</p>
+          <p>Inji is open source. The codebase, release history, and issue discussions are public: github.com/mosip/inji-wallet &nbsp;·&nbsp; <a href="https://docs.inji.io" target="_blank" rel="noopener">docs.inji.io</a></p>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="footer">
+    <div class="container"><div class="credits"><div class="copyright">
+      <p>&copy; <script>document.write(new Date().getFullYear())</script><strong> Divya Ravi</strong></p>
+      <a style="font-size:smaller;">Designed by Divya Ravi</a>
+    </div></div></div>
+  </footer>
+
+  <div id="preloader" aria-hidden="true"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- IMAGE MODAL -->
+<div id="imgModal" class="img-modal" onclick="closeModal()">
+  <span class="close-btn" onclick="closeModal()">&times;</span>
+  <img id="modalImg" class="inji-lightbox-content" onclick="event.stopPropagation()">
+</div>
+
+<script>
+function openModal(img) {
+  document.getElementById("imgModal").style.display = "block";
+  document.getElementById("modalImg").src = img.src;
+}
+
+function closeModal() {
+  document.getElementById("imgModal").style.display = "none";
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === "Escape") {
+    closeModal();
+  }
+});
+</script>
+
+  <!-- PATH: vendor JS — Bootstrap 5 bundle + AOS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <!-- PATH: manifest — defines window.FLOW_MANIFEST_INJI. MUST load first. -->
+  <script src="assets/data/inji-manifest.js"></script>
+  <!-- PATH: flow strip + group frames (shared) -->
+  <script src="assets/js/flow-strip.js?v=5"></script>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

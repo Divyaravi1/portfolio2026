@@ -1,0 +1,1218 @@
+/* ============================================================
+   case-study.css — shared case study styles
+
+   PATH: assets/css/case-study.css
+   Loaded by all five pages, AFTER projectstyle.css.
+
+   1. Hero          — CORRECTIONS.md §7.3
+   2. Flow strip    — CORRECTIONS.md §2, §7.1, §7.2
+
+   ONE hero pattern, five pages. The only per-page declaration is
+   --hero-accent, in that page's own variable block (.beach-hero,
+   .tsg-hero, .rag-hero, .ozchi-hero, .inji-hero). If you find
+   yourself adding a second per-page rule here, something is wrong.
+
+   Markup is normalised: every hero is .project-hero + its page hook,
+   every badge is .badge-type.
+   ============================================================ */
+
+:root {
+  --hero-paper:      #FAFAF8;   /* the notebook page */
+  --hero-ink:        #1A1A18;   /* title    — 16.7:1 on paper */
+  --hero-ink-soft:   #55534E;   /* sub-line —  7.4:1 on paper */
+  --hero-ink-faint:  #8A8780;   /* em, minor detail */
+  --hero-dot-alpha:  28%;       /* 10% was barely visible; 20% reads as paper texture */
+  --hero-tint-alpha: 10%;       /* badge fill */
+}
+
+/* ============================================================
+   1. HERO
+   ============================================================ */
+.project-hero {
+  /* oklch, and mixed against the paper rather than transparent: srgb
+     interpolation toward transparent washes the hue out to grey on a warm
+     ground. This keeps the chroma so the accent is actually readable. */
+  --dot-color:   color-mix(in oklch, var(--hero-accent) var(--hero-dot-alpha), var(--hero-paper));
+  --accent-tint: color-mix(in srgb, var(--hero-accent) var(--hero-tint-alpha), transparent);
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  /* min == max so all five heroes are exactly the same height regardless of
+     how many lines their title runs to. Content is flex-centred inside. */
+  min-height: 55vh;
+  max-height: 55vh;              /* §7.3 — never full viewport */
+  padding: 3rem 0;
+  overflow: hidden;
+  background: var(--hero-paper); /* solid; the dots live on ::before */
+  isolation: isolate;
+}
+
+/* Flex container — the child must be told to fill it or Bootstrap's
+   .container collapses to content width. */
+.project-hero > .container { width: 100%; }
+
+/* Dot-grid ground. On a pseudo-element so it can be masked independently
+   of the background colour — the hero dissolves into the page instead of
+   ending on a hard line. */
+.project-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(circle, var(--dot-color) 1.5px, transparent 1.5px);
+  background-size: 20px 20px;   /* tighter than 24px — denser texture */
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Kill the old radial-glow / wave-texture layers. */
+.project-hero::after { content: none; }
+
+/* Badge — accent text on a low-opacity accent tint (inverted per §7.3). */
+.project-hero .badge-type {
+  display: inline-block;
+  background: var(--accent-tint);
+  color: var(--hero-accent);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.85rem;
+  border-radius: 4px;
+  margin-bottom: 1.4rem;
+}
+
+/* Title — restrained scale, left aligned, ink not accent. */
+.project-hero h1 {
+  font-family: 'DM Serif Display', serif;
+  color: var(--hero-ink);
+  font-size: clamp(1.6rem, 3.2vw, 2.5rem);
+  line-height: 1.18;
+  font-weight: 400;
+  text-align: left;
+  margin: 0 0 1.1rem;
+  position: relative;
+}
+.project-hero h1 em { font-style: italic; color: var(--hero-ink-faint); }
+
+
+.project-hero .hero-sub {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--hero-ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  max-width: 62ch;
+  text-align: left;
+  margin: 0 0 1.6rem;
+}
+
+/* Meta row — accent role 3 of 4. Unboxed: a hairline rule and accent
+   type, set the way a note is written down the side of a page. */
+.project-hero .meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.8rem;
+  align-items: flex-start;
+  margin: 0;
+}
+.project-hero .meta-chip {
+  background: none;
+  border: 0;
+  border-left: 2px solid var(--accent-tint);
+  border-radius: 0;
+  padding: 0.05rem 0 0.05rem 0.7rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--hero-accent);
+}
+.project-hero .meta-chip strong {
+  display: block;
+  color: var(--hero-ink-faint);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.05rem;
+}
+
+/* Link hover — accent role 4 of 4. */
+.project-hero a:hover { color: var(--hero-accent); }
+
+@media (max-width: 768px) {
+  .project-hero {
+    min-height: 0;
+    max-height: none;              /* meta row wraps — never clip */
+    padding: 2.4rem 0 2.2rem;
+  }
+  .project-hero .meta-row { gap: 0.5rem 1.1rem; }
+}
+
+/* Short viewports — keep the first body section peeking. */
+@media (max-height: 620px) and (min-width: 769px) {
+  .project-hero { min-height: 0; padding: 2rem 0; }
+}
+
+/* color-mix() fallback — keep the hero neutral rather than broken. */
+@supports not (color: color-mix(in srgb, red 10%, transparent)) {
+  .project-hero {
+    --dot-color:   rgba(26, 26, 24, 0.16);
+    --accent-tint: rgba(26, 26, 24, 0.08);
+  }
+}
+
+
+/* ============================================================
+   2. FLOW STRIP                       CORRECTIONS.md §2, §7.1–7.2
+
+   A horizontal run of screens joined by curved SVG strands, in the
+   visual language of Figma prototype connectors.
+
+   Arrows are the ONLY control. There is no scrollbar, no slider, no
+   drag handle. Native touch and trackpad scrolling still work — only
+   the scrollbar chrome is hidden.
+   ============================================================ */
+.flow-strip,
+.flow-strip *,
+.flow-strip *::before,
+.flow-strip *::after { box-sizing: border-box; }
+
+.flow-strip {
+  --fs-gap:        32px;   /* also the strand length — never 0 */
+  --fs-cols:       4;
+  --fs-ink:        #1A1A18;
+  --fs-muted:      #6B6862;
+  --fs-line:       #C9C6BF;
+  --fs-surface:    #FFFFFF;
+  --fs-strand:     #857F73;
+  --fs-radius:     8px;    /* Ruling I — 22px is too round at tile size */
+  --fs-conn-h:     26px;   /* reserved band above every tile for the connector */
+  --fs-conn-w:     2.5px; /* connector stroke — heavier than the 1px frame */
+  --fs-paper:      #FAFAF8;  /* page ground, used by the crop fade */
+  --fs-conn-out:   13px;   /* how far the arrow reaches past the tile's edge */
+  --fs-ratio:      9 / 19.5;   /* portrait default; .flow-strip--landscape overrides */
+
+  position: relative;
+  margin: 2.5rem 0;
+}
+
+/* No break-out: the strip sits inside .text-with-margins like every other
+   element, just narrower. Tiles are expandable, so smaller ones are fine. */
+
+.flow-strip--landscape { --fs-ratio: 16 / 10; }
+
+/* ── Group frame — now on EVERY group of screens ───────────────
+   The frame is a container; the label is what marks a use case.
+   Frame + label = use-case variant. Frame alone = a normal flow.
+
+   Drawn as an injected SVG rect rather than border: 1px dashed,
+   because the dash pattern has to be exact. The frame and the
+   connector are both dotted and sit close together, so they are
+   deliberately pulled apart: the frame is wide-spaced (4 6) at 60%
+   opacity so it reads as a container, the connector is tight (2 4)
+   at full contrast so it reads as a signal. Two identical dotted
+   lines side by side would just look like noise.
+
+   No viewBox on the SVG, so 1 user unit = 1px and the dashes never
+   scale with the box. ── */
+.flow-strip__group {
+  position: relative;
+  /* top padding clears the connector's vertical rise — the connector
+     sits inside the frame, never straddling it */
+  padding: 1.9rem 1.1rem 1.1rem;
+}
+
+.fs-frame {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  /* Explicit width/height: an <svg> is a replaced element, so `inset`
+     alone leaves it at its intrinsic 300x150 instead of stretching. */
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0;
+}
+.fs-frame rect {
+  fill: none;
+  stroke: var(--fs-strand);
+  stroke-opacity: 0.6;          /* lower contrast than the connector */
+  stroke-width: 1;
+  stroke-dasharray: 4 6;        /* wider spacing than the connector */
+}
+
+/* The label is unchanged — it is still the only use-case marker. */
+.flow-strip__usecase {
+  position: absolute;
+  top: 0;
+  left: 1.4rem;
+  z-index: 2;
+  transform: translateY(-50%);
+  background: var(--hero-paper, #FAFAF8);
+  padding: 0 0.55rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fs-muted);
+}
+
+/* Reusable elsewhere: any group of screens can carry the same frame.
+   JS injects the rect into .fs-framed on load. */
+.fs-framed { position: relative; padding: 1.4rem 1.1rem 1.1rem; }
+.fs-framed > .fs-frame { z-index: 0; }
+
+/* ── Track ───────────────────────────────────────────────────── */
+.flow-strip__viewport { position: relative; }
+
+.flow-strip__track {
+  display: flex;
+  gap: var(--fs-gap);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  /* No visible scrollbar anywhere — arrows are the navigation. */
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* old Edge / IE */
+
+  /* Headroom for the 1.03 hover scale, which overflow-y: hidden
+     would otherwise clip. */
+  padding: 8px 0;
+}
+.flow-strip__track::-webkit-scrollbar { display: none; }   /* WebKit / Blink */
+
+/* ── Screen tile ─────────────────────────────────────────────── */
+.flow-strip__screen {
+  position: relative;               /* strand anchors to this */
+  flex: 0 0 calc((100% - (var(--fs-cols) - 1) * var(--fs-gap)) / var(--fs-cols));
+  scroll-snap-align: start;
+  min-width: 0;
+}
+
+.flow-strip__btn {
+  display: block;
+  position: relative;          /* anchor for the crop fade */
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius);
+  background: var(--fs-surface);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 150ms ease-out, border-color 150ms ease-out;
+}
+.flow-strip__btn:hover {
+  transform: scale(1.03);           /* §4.4 — no bounce, no overshoot */
+  border-color: var(--fs-muted);    /* slight border darkening */
+}
+.flow-strip__btn:focus-visible {
+  outline: 3px solid var(--hero-accent, #34327E);
+  outline-offset: 2px;
+}
+
+/* aspect-ratio matches the real screenshot ratio, which is why
+   orientation is declared per strip: cover then crops nothing and
+   nothing is letterboxed. */
+.flow-strip__btn img {
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--fs-ratio);
+  object-fit: cover;
+  object-position: top;        /* the top of a screen always shows */
+  border-radius: 0;
+  margin: 0;
+}
+
+/* Cropped tile — a short fade to the page ground, signalling more below.
+   Tiles keep a fixed aspect ratio per strip whatever the source height, so
+   a row never goes ragged and the labels and connector anchor stay in line.
+   .is-cropped is set by JS when the natural ratio is taller than the tile,
+   or unconditionally when the manifest says "tall": true. */
+.flow-strip__btn.is-cropped::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 46px;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(250, 250, 248, 0) 0%,
+    rgba(250, 250, 248, 0.72) 55%,
+    var(--fs-paper) 100%);
+}
+
+.flow-strip__label {
+  display: block;
+  margin-top: 0.55rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--fs-muted);
+  text-align: center;
+}
+
+/* ── Page connector ───────────────────────────────────────────
+   Exactly ONE per strip, on the last visible tile of the current page,
+   and only when a further page exists. There are no inter-tile strands.
+
+   Shape: rises from the tile's top edge at roughly its mid-width,
+   turns a hard 90 degrees, runs right, and ends in an arrowhead just
+   past the tile's right edge.
+
+   It lives on .flow-strip__viewport, NOT inside .flow-strip__track.
+   The last visible tile of a page always ends flush with the track's
+   scrollport edge — that is what "four across fills the viewport"
+   means — so anything overhanging that edge gets clipped by the
+   track's overflow-x. The viewport does not clip, so the arrowhead
+   survives. JS sets width, top and --fs-conn-mid from the tile's
+   measured geometry.
+
+   Lines are gradients and the arrowhead is a rotated bordered box, so
+   the 2/4 dash stays exact at any tile width and nothing skews.
+
+   aria-hidden: the arrow buttons carry the real affordance.
+
+   The band is reserved on every tile via padding-top, so showing or
+   hiding the connector never shifts the layout. ── */
+.flow-strip__screen { padding-top: var(--fs-conn-h); }
+
+.fs-connector {
+  position: absolute;
+  right: calc(-1 * var(--fs-conn-out));
+  height: var(--fs-conn-h);
+  visibility: hidden;            /* space stays reserved either way */
+  color: var(--fs-strand);
+  transition: opacity 150ms ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+.fs-connector.is-visible { visibility: visible; }
+
+/* vertical rise, from the tile's top edge up to the elbow */
+.fs-connector__v {
+  position: absolute;
+  left: var(--fs-conn-mid, 50%);
+  bottom: 0;
+  width: var(--fs-conn-w);
+  height: calc(100% - var(--fs-conn-w));
+  background: repeating-linear-gradient(
+    to bottom, currentColor 0 2px, transparent 2px 6px);
+}
+
+/* horizontal run, from the elbow to the arrowhead */
+.fs-connector__h {
+  position: absolute;
+  left: var(--fs-conn-mid, 50%);
+  top: 0;
+  right: 10px;
+  height: var(--fs-conn-w);
+  background: repeating-linear-gradient(
+    to right, currentColor 0 2px, transparent 2px 6px);
+}
+
+/* 90-degree elbow with a 2px radius — a right angle, not a curve */
+.fs-connector__elbow {
+  position: absolute;
+  left: var(--fs-conn-mid, 50%);
+  top: 0;
+  width: 5px;
+  height: 5px;
+  border-top: var(--fs-conn-w) solid currentColor;
+  border-left: var(--fs-conn-w) solid currentColor;
+  border-top-left-radius: 3px;
+}
+
+/* Arrowhead — two borders on a rotated square, not an SVG path.
+   Same technique as the bubble tail. */
+.fs-connector__head {
+  position: absolute;
+  right: 2px;
+  top: -3.1px;
+  width: 8px;
+  height: 8px;
+  border-top: var(--fs-conn-w) solid currentColor;
+  border-right: var(--fs-conn-w) solid currentColor;
+  transform: rotate(45deg);
+}
+
+/* ── Arrows — the only control ────────────────────────────────
+   Vertically centred, overlapping the outermost tiles slightly so it
+   reads that more content exists. Subtle at rest but >=3:1; full
+   contrast on hover and focus-visible. ── */
+.flow-strip__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--fs-line);
+  border-radius: 50%;
+  background: var(--fs-surface);
+  color: #57544E;                    /* 6.6:1 on white at rest */
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.10);
+  transition: background 150ms ease-out, color 150ms ease-out,
+              border-color 150ms ease-out, opacity 150ms ease-out;
+}
+.flow-strip__arrow--prev { left: -14px; }    /* overlaps the first tile */
+.flow-strip__arrow--next { right: -14px; }   /* overlaps the last tile  */
+
+.flow-strip__arrow:hover:not(:disabled),
+.flow-strip__arrow:focus-visible:not(:disabled) {
+  background: var(--fs-ink);
+  color: #FFFFFF;                    /* 16.5:1 */
+  border-color: var(--fs-ink);
+}
+.flow-strip__arrow:focus-visible {
+  outline: 3px solid var(--hero-accent, #34327E);
+  outline-offset: 2px;
+}
+.flow-strip__arrow:disabled {        /* disabled at each end, never loops */
+  opacity: 0.28;
+  cursor: default;
+  box-shadow: none;
+}
+.flow-strip__arrow[hidden] { display: none; }   /* group fits — no arrows */
+.flow-strip__arrow svg { width: 17px; height: 17px; fill: currentColor; }
+
+/* ── Caption / gloss ─────────────────────────────────────────── */
+.flow-strip__caption {
+  margin: 1rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--fs-muted);
+  font-style: italic;
+}
+.flow-strip__gloss {
+  margin: 0.35rem 0 0;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: #86837C;
+  font-style: normal;
+}
+
+/* ── Expanded view ────────────────────────────────────────────
+   A full-screen lightbox, appended to <body> rather than the strip, so
+   it can never overlap or shift anything on the page — the strip stays
+   exactly as it was underneath.
+
+   Appending to <body> also means it sits OUTSIDE .flow-strip, which is
+   where --fs-ink / --fs-line / --fs-surface are declared (see the
+   .flow-strip rule above). Without redeclaring the trio the lightbox
+   actually uses, every var() reference here falls through to whatever
+   the surrounding page happens to inherit — background-color has no
+   inherited fallback at all, so it silently resolves to transparent.
+   That is why the bubble and close button read as invisible rather
+   than merely miscoloured: same layout, no fill. ── */
+.flow-strip__lightbox {
+  --fs-ink:     #1A1A18;
+  --fs-line:    #C9C6BF;
+  --fs-surface: #FFFFFF;
+
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.25rem 1.25rem;     /* headroom for the bubble above the screen */
+  background: rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .flow-strip__lightbox { animation: fs-lightbox-fade 150ms ease-out both; }
+}
+@keyframes fs-lightbox-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Shrinks to the image's rendered size, so the bubble anchors to its
+   real top-right corner rather than to an oversized box. */
+.flow-strip__lightbox-frame {
+  position: relative;
+  width: fit-content;
+  max-width: 90vw;
+  max-height: 85vh;
+}
+
+/* The lightbox shows the whole screenshot at its true aspect ratio,
+   centred, bounded by height and width so it always fits the viewport
+   with room to spare for the close button and the bubble. */
+.flow-strip__lightbox-img {
+  display: block;
+  max-height: 85vh;
+  max-width: 90vw;
+  width: auto;                       /* width follows the natural ratio */
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+}
+
+/* A screen with an explanation reserves room beside itself for the
+   bubble — the image gives up 20vw of width it would otherwise use, so
+   the bubble has somewhere to sit that isn't on top of the screenshot.
+   Below 900px the bubble moves under the image instead (see the bubble
+   rules), so the reservation is dropped and the image gets the full
+   90vw back. */
+@media (min-width: 900px) {
+  .flow-strip__lightbox-frame.has-note {
+    max-width: 70vw;
+  }
+  .flow-strip__lightbox-frame.has-note .flow-strip__lightbox-img,
+  .flow-strip__lightbox-frame.has-note .img-pending {
+    max-width: 70vw;
+  }
+}
+
+.flow-strip__lightbox-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--fs-line);
+  border-radius: 50%;
+  background: var(--fs-surface);
+  color: var(--fs-ink);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.flow-strip__lightbox-close:hover { background: var(--fs-ink); color: #fff; }
+.flow-strip__lightbox-close:focus-visible {
+  outline: 3px solid var(--hero-accent, #34327E);
+  outline-offset: 2px;
+}
+
+.flow-strip__lightbox-label {
+  margin: 0.6rem 0 0;
+  text-align: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.76rem;
+  color: #EFEDE6;
+}
+
+/* Locks page scroll behind the lightbox while it's open. */
+body.flow-strip-lightbox-open { overflow: hidden; }
+
+/* ── Comment bubble ───────────────────────────────────────────
+   Anchored to the TOP-RIGHT corner of the expanded screen, tail
+   overlapping the corner — sitting on the boundary, not floating
+   beside it. Built only when explanation is non-null; a null
+   explanation produces no element at all, so no empty container and
+   no layout shift.
+
+   At >=900px it sits beside the screen, in the 20vw the frame gives up
+   when .has-note caps the image at 70vw (see the frame rules above),
+   overlapping the top-right corner by a few pixels on both edges. JS
+   clamps it after layout: if that overlap would push it past the
+   viewport's right or top edge, clampBubble() nudges it back with a
+   transform, the tail stays put since it's positioned off the corner
+   rather than the bubble's own edges.
+
+   Below 900px there usually isn't 20vw to spare, so the bubble drops
+   under the image instead — see the max-width: 899px override. ── */
+.flow-strip__bubble {
+  /* Explicit, not inherited from Bootstrap's reboot. max-width: 380px is a
+     hard requirement, and with content-box the padding and border push the
+     bubble to 414px. Never let a spec'd dimension depend on a CDN loading. */
+  box-sizing: border-box;
+  position: absolute;
+  left: 100%;                        /* flush with the screen's right edge */
+  margin-left: 2%;
+  top: 5%;                      /* flush with the screen's top edge —
+                                         the bubble's own bottom-left corner
+                                         now IS the screen's top-right corner,
+                                         so the tail (below) only has to
+                                         reach back to where it's rooted */
+  z-index: 6;
+  max-width: min(420px, 100%);
+  width: max-content;
+  padding: 0.8rem 1rem;
+  background: var(--fs-surface);
+  border: 1px solid var(--fs-line);
+  border-radius: 8px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.13);
+  font-size: 0.85rem;                /* body copy size */
+  line-height: 1.55;
+  color: var(--fs-ink);
+  text-align: left;
+  transform-origin: bottom left;     /* the tail — bubble grows out of it */
+}
+
+/* Tail: a REAL element (not ::before) so it can be measured directly —
+   a rotated isosceles triangle via clip-path, not a clipped rectangle.
+   Base ~12px, tapering to a single point.
+
+   The bubble's own bottom-left corner is now flush with the screen's
+   top-right corner (see .flow-strip__bubble above). The tail's base
+   sits 6px right and 6px up from THAT shared point — comfortably
+   inside the bubble — and a 45deg rotation swings its point back down
+   and left along the same diagonal, landing within a pixel of the
+   corner. Same background as the bubble and no border of its own, so
+   the seam between them disappears. */
+.flow-strip__bubble-tail {
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 12px;
+  height: 9px;
+  background: var(--fs-surface);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform: rotate(45deg);
+  transform-origin: 50% 0%;
+  pointer-events: none;
+}
+
+/* <900px: beside the image there usually isn't 20vw to spare, so the
+   bubble becomes a full-width block under it instead. Tail flips to
+   the top-right, pointing up at the corner it now sits below. */
+@media (max-width: 899px) {
+  .flow-strip__bubble {
+    position: static;
+    margin: 0.9rem 0 0;
+    width: 100%;
+    max-width: 100%;
+    transform: none;                 /* undo any clamp nudge from a wider view */
+  }
+  .flow-strip__bubble-tail {
+    left: auto;
+    right: 22px;
+    bottom: auto;
+    top: -9px;
+    width: 12px;
+    height: 9px;
+    clip-path: polygon(0 100%, 100% 100%, 50% 0%);   /* plain upward point —
+      the bubble is a full-width block directly under the image here, not
+      corner-anchored, so no diagonal rotation is needed */
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .flow-strip__bubble {
+    animation: flow-bubble-pop 200ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+}
+@keyframes flow-bubble-pop {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Breakpoints — 4 / 2 / 1 (§4.7) ──────────────────────────────
+   !important on --fs-cols: a strip can set its own desktop column
+   count inline (e.g. columns: 2 in the manifest for a landscape
+   strip) via JS, which is otherwise higher-priority than any
+   stylesheet rule. These breakpoints must still win as the viewport
+   narrows, or a strip pinned to 2 columns would never drop to 1. */
+@media (max-width: 1099px) {
+  .flow-strip { --fs-cols: 2 !important; --fs-gap: 28px; }
+}
+@media (max-width: 699px) {
+  .flow-strip { --fs-cols: 1 !important; --fs-gap: 26px; }   /* strand still visible */
+  .flow-strip__arrow { width: 36px; height: 36px; }
+  .flow-strip__arrow--prev { left: -10px; }
+  .flow-strip__arrow--next { right: -10px; }
+}
+
+/* ── Reduced motion — every animation and transition off ─────── */
+@media (prefers-reduced-motion: reduce) {
+  .flow-strip__track { scroll-behavior: auto; }
+  .flow-strip__btn,
+  .flow-strip__arrow,
+  .fs-connector { transition: none; }
+  .flow-strip__btn:hover { transform: none; border-color: var(--fs-muted); }
+  .flow-strip__bubble { animation: none; }
+  .flow-strip__lightbox { animation: none; }
+}
+
+
+/* ============================================================
+   .cs-expandable — plain click-to-expand images outside the flow-strip
+   system (Agentic AI, RAG Trust). Wraps a single <img> in a <button>
+   so the trigger is keyboard-reachable without any bespoke affordance.
+   Opens the same full-screen lightbox as a flow-strip screen, wired by
+   flow-strip.js's decorateExpandables() — no manifest, so no bubble.
+
+   `all: unset` strips the browser's default button chrome (border,
+   background, padding, font inheritance quirks); the properties below
+   restore only what's needed to make it behave like the image it wraps.
+   ============================================================ */
+.cs-expandable {
+  all: unset;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  border-radius: inherit;
+}
+.cs-expandable img { display: block; width: 100%; }
+.cs-expandable:focus-visible {
+  outline: 3px solid var(--hero-accent, #34327E);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   Ruling I — img-fluid radius scoping
+
+   projectstyle.css sets a global .img-fluid { border-radius: 22px }.
+   Far too round on a small tile.
+   ============================================================ */
+.flow-strip .img-fluid,
+.flow-strip img {
+  border-radius: var(--fs-radius);
+  margin-bottom: 0;
+}
+.condition-shot .img-fluid,
+.condition-shot img,
+.oz-condition img {
+  border-radius: 4px;
+  margin-bottom: 0;
+}
+
+
+/* ============================================================
+   3. CASE STUDY BODY — shared pieces used by the rebuilt pages
+   ============================================================ */
+
+/* Italic sub-line under a heading. §6: where a technical term applies it
+   goes here, not in the heading. */
+.cs-subline {
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--fs-muted);
+  margin: -0.35rem 0 1.1rem;
+}
+
+/* Caption style. Also used for acronym glosses and the closing line —
+   present, subordinate, skippable, like a photo credit. */
+.cs-caption {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--fs-muted);
+  font-style: italic;
+  margin: 0.75rem 0 0;
+}
+.cs-gloss {
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: #86837C;
+  font-style: normal;
+  margin: 0.3rem 0 0;
+}
+
+/* Closing line — the last element on the page. Caption style, muted, one
+   line, NO heading above it. */
+.cs-closing {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--fs-muted);
+  font-style: italic;
+  margin: 0;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--fs-line);
+}
+
+/* Before/after pair and state-set grid. Both carry .fs-framed so groups of
+   screens read consistently with the flow strip. */
+.cs-pair, .cs-stateset { margin: 1.6rem 0; }
+.cs-pair img, .cs-stateset img {
+  width: auto;
+  height: auto;
+  max-width: 98%;
+  display: block;
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius);
+  margin: 0 auto;
+}
+.cs-pair-label, .cs-state-label {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fs-muted);
+  text-align: center;
+}
+
+/* Anchored detail — a full screen beside a crop of it. */
+.cs-anchored { margin: 1.6rem 0; }
+
+/* Snapshot block. Was a fenced code block in the content file. */
+.cs-snapshot {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.45rem 1.6rem;
+  margin: 0 0 1.4rem;
+  padding: 1.3rem 1.5rem;
+  border: 1px solid var(--fs-line);
+  border-radius: var(--fs-radius);
+  background: rgba(255,255,255,0.55);
+  font-size: 0.9rem;
+}
+.cs-snapshot dt {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fs-muted);
+  padding-top: 0.15rem;
+}
+.cs-snapshot dd { margin: 0; color: #2A2823; }
+@media (max-width: 600px) {
+  .cs-snapshot { grid-template-columns: 1fr; gap: 0.15rem; }
+  .cs-snapshot dt { padding-top: 0.7rem; }
+}
+
+/* Surface table — Context section. */
+.cs-table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 0; font-size: 0.88rem; }
+.cs-table th, .cs-table td {
+  text-align: left;
+  padding: 0.6rem 0.9rem 0.6rem 0;
+  border-bottom: 1px solid var(--fs-line);
+  vertical-align: top;
+}
+.cs-table th {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fs-muted);
+}
+
+
+/* ------------------------------------------------------------
+   Accent — two places only, both type, never a line.
+
+   1. section headings set in the page accent instead of ink
+   2. meta chips and badges — accent text on a 10% accent tint
+
+   There are no decorative rules or dividers anywhere. Section
+   separation is whitespace. Beach Camp's waves and RAG's spikes stay
+   — those are existing page furniture, not accents.
+   ------------------------------------------------------------ */
+/* Beach Camp and TSG set section headings at h3 (CORRECTIONS.md §3.1/§4.1
+   fix those levels), so the accent covers h2 and section-level h3 alike. */
+#main h2,
+#about h2,
+.cs-body h2,
+#main .text-with-margins h3 {
+  color: var(--hero-accent);
+}
+
+
+/* The hero accent variable has to reach the body, not just the hero. */
+body { --hero-accent: #5B03AD; }
+
+
+/* ------------------------------------------------------------
+   Placeholder-asset groups
+
+   A group whose images are still stubs carries .pending-assets and is
+   hidden. Drop the class from the wrapper once the real images are in
+   place — the markup underneath is already final.
+   ------------------------------------------------------------ */
+.pending-assets { display: none; }
+
+
+/* ------------------------------------------------------------
+   Drawer — supporting detail, collapsed by default
+
+   Native <details>/<summary>, no JavaScript. Summary text says what is
+   inside rather than "read more". Used for the statistics block on
+   Agentic AI and for supporting sections on Inji and RAG Trust.
+
+     <details class="cs-drawer">
+       <summary>What is inside</summary>
+       <div class="cs-drawer__body"> … </div>
+     </details>
+   ------------------------------------------------------------ */
+.cs-drawer {
+  border: 1px solid color-mix(in srgb, var(--hero-accent) 30%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--hero-accent) 4%, transparent);
+  margin: 1.8rem 0;
+  overflow: hidden;
+}
+.cs-drawer > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.3rem;
+  cursor: pointer;
+  list-style: none;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--hero-accent);
+}
+.cs-drawer > summary::-webkit-details-marker { display: none; }
+.cs-drawer > summary::marker { content: ''; }
+
+/* chevron, rotates on open */
+.cs-drawer > summary::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 200ms ease;
+}
+.cs-drawer[open] > summary::before { transform: rotate(45deg); }
+
+.cs-drawer > summary:hover { background: color-mix(in srgb, var(--hero-accent) 7%, transparent); }
+.cs-drawer > summary:focus-visible {
+  outline: 3px solid var(--hero-accent);
+  outline-offset: -3px;
+}
+
+.cs-drawer__body {
+  padding: 0.2rem 1.3rem 1.3rem;
+  border-top: 1px solid color-mix(in srgb, var(--hero-accent) 18%, transparent);
+  margin-top: 0.2rem;
+}
+.cs-drawer__body > *:first-child { margin-top: 0.9rem; }
+
+/* Smooth open/close where the engine supports interpolating to auto. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (interpolate-size: allow-keywords) {
+    :root { interpolate-size: allow-keywords; }
+    .cs-drawer::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition: block-size 260ms ease, content-visibility 260ms allow-discrete;
+    }
+    .cs-drawer[open]::details-content { block-size: auto; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-drawer > summary::before { transition: none; }
+}
+
+
+/* ============================================================
+   TEMPORARY SCAFFOLDING — remove once every screen is supplied.
+
+   A screenshot that has not been delivered yet renders as a broken
+   image. This makes that state look deliberate instead: a dashed
+   accent outline, a faint accent wash, and the alt text centred in
+   muted type at the slot's aspect ratio.
+
+   Applied automatically by the onerror handler in flow-strip.js —
+   no per-image markup. When the real images land, nothing here fires
+   and the whole block can be deleted along with markPendingImages().
+   ============================================================ */
+.img-pending {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: var(--pending-ratio, 4 / 3);
+  padding: 1rem 1.2rem;
+  box-sizing: border-box;
+  border: 1px dashed color-mix(in srgb, var(--hero-accent) 20%, transparent);
+  border-radius: var(--fs-radius, 8px);
+  background: color-mix(in srgb, var(--hero-accent) 3%, transparent);
+}
+.img-pending::after {
+  content: attr(data-pending-label);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.74rem;
+  line-height: 1.5;
+  text-align: center;
+  color: color-mix(in srgb, var(--hero-accent) 55%, #6B6862);
+  max-width: 30ch;
+}
+/* the failed <img> stays in the DOM for alt/AT, but takes no space */
+.img-pending > img { display: none; }
+
+/* Same treatment inside the lightbox. Without it a pending image
+   collapses to nothing and the comment bubble floats beside empty
+   space; with it the box takes the same footprint a loaded screenshot
+   would, sized the same way — by height, ratio-derived width capped at
+   90vw. The ratio itself already carries portrait vs. landscape (JS
+   reads it from the real image or falls back to the strip's own
+   orientation), so no separate override is needed here. Temporary
+   scaffolding — goes with the rest of this block. */
+.flow-strip__lightbox .img-pending {
+  height: 85vh;
+  max-width: 90vw;
+  aspect-ratio: var(--pending-ratio, 9 / 19.5);
+  border-radius: 0;
+}
+.flow-strip__lightbox .img-pending::after { font-size: 0.82rem; max-width: 34ch; }
+
+
+/* ------------------------------------------------------------
+   Closing note — a post-it, not a panel
+
+   Solid coloured paper (page accent at 14% over the page background,
+   so each page gets its own paper colour within its family), a lifted
+   corner made from a rotated box-shadow rather than a drawn fold, a
+   contact shadow, and a visible tilt. No tape, pin, drawn fold line
+   or torn edge — the curl shadow does that job on its own.
+
+   Square-ish and offset left, so it reads as something stuck onto the
+   page rather than a designed block in the content flow.
+
+   The paper lives on ::before, not on .cs-note itself. .cs-note has a
+   transform, which forces it to establish its own stacking context —
+   inside that context an element's OWN background always paints below
+   any negative z-index child, so the ::after curl shadow (z-index:-1)
+   would render on top of the paper instead of behind it: a grey smear
+   across the note rather than a shadow peeking out at the edge.
+   Moving the paper to ::before (a normal positioned child, stack level
+   0) puts it above ::after and below the text, which is the order the
+   thing actually needs to render in.
+   ------------------------------------------------------------ */
+.cs-note {
+  position: relative;
+  isolation: isolate;              /* keeps ::after's z-index: -1 local */
+  width: 340px;
+  min-height: 300px;
+  margin: 4rem 0 3rem;
+  margin-left: 0;                  /* offset left, not centred */
+  padding: 2.2rem;
+  display: flex;
+  align-items: center;             /* content vertically centred */
+  transform: rotate(-2.2deg);
+}
+
+/* the paper itself — sits above the curl shadow, below the text */
+.cs-note::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 2px;              /* sharp corners — a sheet, not a card */
+  /* solid paper: page accent at 14% over the page ground, with a
+     barely-there vertical gradient so it reads as a physical sheet */
+  background:
+    linear-gradient(to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.035) 100%),
+    color-mix(in srgb, var(--hero-accent) 14%, var(--hero-paper, #FAFAF8));
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);   /* contact shadow */
+}
+
+/* the lifted corner — a rotated shadow underneath the paper */
+.cs-note::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: 14px;
+  right: 10px;
+  width: 62%;
+  height: 22px;
+  box-shadow: 0 15px 11px rgba(0, 0, 0, 0.24);
+  transform: rotate(-3deg);
+}
+
+/* .text-with-margins .cs-note p (rather than .cs-note p) so this beats each
+   page's own ".text-with-margins p { color: var(--text-body) }" rule — same
+   specificity otherwise, and several pages' inline <style> blocks load after
+   this stylesheet and were silently winning the ink colour. Also needs to
+   sit above ::before (the paper), hence position + z-index. */
+.text-with-margins .cs-note p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  font-style: italic;
+  color: rgba(26, 26, 24, 0.85);   /* dark ink — writing on paper, not
+                                       coloured writing */
+}
+
+@media (max-width: 640px) {
+  .cs-note {
+    width: 100%;
+    max-width: 340px;
+    transform: rotate(-1.2deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-note { transform: none; }
+}
+
+/* ------------------------------------------------------------
+   Inline diagrams — orientation and routing-fork SVGs
+
+   Two full markup variants per diagram (wide / narrow) rather than
+   one viewBox reflowed by CSS: a single viewBox sized for the wide
+   layout would leave dead space below a stacked narrow layout, since
+   width:100%/height:auto derives height from the viewBox aspect
+   ratio. Toggled by display, so only one is ever in the a11y tree.
+
+   Colour, never hardcoded: node fill/stroke and arrows all read
+   var(--hero-accent); label text reads var(--ink) / var(--muted).
+   Font is whatever the page already sets on body — SVG text inherits
+   it, so it's never named here.
+   ------------------------------------------------------------ */
+.cs-diagram { margin: 1.6rem 0; }
+.cs-diagram svg { display: block; width: 100%; height: auto; }
+/* Past ~1100px the column itself can exceed the diagram's natural size,
+   stretching short, deliberate arrows into long, floating ones. Capping
+   the wide variant and centring it keeps the drawing at the scale it was
+   actually drawn at. */
+.cs-diagram svg.cs-diagram__wide { max-width: 720px; margin-inline: auto; }
+/* svg.cs-diagram__narrow (not .cs-diagram__narrow alone) so this out-specifies
+   ".cs-diagram svg" above — a bare class selector is LESS specific than
+   class+type and was silently losing, leaving both variants visible. */
+.cs-diagram svg.cs-diagram__narrow { display: none; }
+@media (max-width: 640px) {
+  .cs-diagram svg.cs-diagram__wide   { display: none; }
+  .cs-diagram svg.cs-diagram__narrow { display: block; }
+}
+
+.cs-diagram .node-box  { fill: var(--hero-accent); fill-opacity: 0.08; stroke: var(--hero-accent); stroke-opacity: 0.3; stroke-width: 1.5px; }
+.cs-diagram .node-title{ fill: var(--ink); font-size: 14px; text-anchor: middle; }
+.cs-diagram .node-sub  { fill: var(--muted); font-size: 11px; text-anchor: middle; }
+.cs-diagram .arrow     { fill: none; stroke: var(--hero-accent); stroke-linecap: round; stroke-linejoin: round; }
+.cs-diagram .arrow--dim{ stroke-width: 4px; stroke-opacity: 0.4; }
+.cs-diagram .arrow--strong{ stroke-width: 5px; stroke-opacity: 1; }
+.cs-diagram .arrow--plain{ stroke-width: 4px; stroke-opacity: 0.85; }
+/* Orthogonal elbow connectors (routing fork) — round caps and joins
+   inherited from .arrow, 3px stroke, full opacity. */
+.cs-diagram .arrow--elbow{ stroke-width: 3px; stroke-opacity: 1; }
+/* paint-order draws the stroke UNDER the glyphs rather than over them,
+   so it reads as a halo rather than an outline. Matches the section
+   background (#F7F5FA) behind both diagrams, so a label never sits
+   directly on a connector line or curve even where its box brushes one. */
+.cs-diagram .arrow-label{
+  fill: var(--muted);
+  font-size: 11.5px;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: #F7F5FA;
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.cs-diagram .diagram-note{ fill: var(--muted); font-size: 11px; font-style: italic; }

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+
+  <title>Trust and Transparency | Divya Ravi</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+  
+  <!-- Favicons -->
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> 
+
+  <link rel="icon" href="data:,">
+
+  <!-- Google Fonts -->
+   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+
+  <link href='https://fonts.googleapis.com/css?family=Josefin Sans' rel='stylesheet'>
+
+  <!-- Runs before any CSS. Two jobs, both fail-safe:
+       1. adds .js to <html> — [data-aos] hiding is gated on it, so if this
+          script never runs every animated element renders visible.
+       2. adds .preloader-seen on repeat visits in the same tab, so the
+          preloader is never painted on internal navigation (no flash). -->
+  <script>
+    document.documentElement.className += ' js';
+    try {
+      if (sessionStorage.getItem('dr-preloader-shown')) {
+        document.documentElement.className += ' preloader-seen';
+      }
+    } catch (e) { /* private mode / storage blocked — just show the preloader */ }
+  </script>
+  <!-- PATH: vendor CSS — Bootstrap 5, Bootstrap Icons, AOS (CDN; local vendor/ was absent) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <!-- PATH: main stylesheet -->
+  <link href="assets/css/projectstyle.css" rel="stylesheet">
+  <!-- PATH: shared case study styles — hero pattern (flow strip to follow) -->
+  <link href="assets/css/case-study.css?v=5" rel="stylesheet">
+
+  <style>
+    /* ── Global line-height ── */
+    .text-with-margins p.text-with-margins li { line-height: 1.8; }
+
+    /* ── Research question callout ── */
+    .rq-callout {
+      background: #f0f6ff;
+      padding: 1.2rem 1.6rem;
+      border-radius: 8px;
+      margin: 1rem 0 2rem;
+    }
+    .rq-callout p {
+      margin: 0;
+      font-size: 1rem;
+      color: #1A524D;
+      font-weight: 600;
+      font-style: normal !important;
+    }
+
+    /* ── Feature cards (System Features Evaluated) ── */
+    .feature-card {
+      background: #f0f6ff;
+      border: 1px solid #C2E0DC;
+      border-radius: 10px;
+      padding: 1.4rem 1.8rem;
+      margin-bottom: 1.8rem;
+    }
+    .feature-card h4 {
+      color: #123B39 !important;
+      font-weight: 600 !important;
+      font-size: 0.95rem !important;
+      margin-bottom: 0.5rem;
+    }
+    .feature-card ul { margin-bottom: 0; padding-left: 1.2rem; }
+    .feature-card li { font-size: 0.92rem; color: #2C6B66; padding: 2px 0; }
+
+    /* ── Research Findings section wrapper ── */
+    .findings-section { background: #f5f8ff; }
+
+    /* ── Finding cards ── */
+    .finding-card {
+      border-radius: 10px;
+      padding: 1.5rem 1.8rem;
+      margin-bottom: 1.8rem;
+    }
+    .finding-card.fc-trust      { background: #DFEEEC; border-left: 5px solid #12615C; }
+    .finding-card.fc-understand { background: #E6F2F0; border-left: 5px solid #16706B; }
+    .finding-card.fc-control    { background: #EEFFFE; border-left: 5px solid #5BD6CC; }
+
+    .finding-label {
+      font-family: "Josefin Sans", sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #3A8A83;
+      opacity: 0.7;
+      margin-bottom: 0.25rem;
+    }
+    .finding-card h4 {
+      font-size: 1rem !important;
+      font-weight: 700 !important;
+      color: #1A524D !important;
+      margin-bottom: 0.7rem;
+    }
+    .stat-pill {
+      display: inline-block;
+      background: #fff;
+      border-radius: 20px;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      color: #12615C;
+    }
+    .finding-card ul  { padding-left: 1.1rem; margin-bottom: 0; }
+    .finding-card li  { font-size: 0.92rem; color: #2C6B66; padding: 2px 0; }
+
+    /* ── Theme grid (User Control) ── */
+    .theme-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      margin-top: 0.8rem;
+    }
+    @media (max-width: 600px) { .theme-grid { grid-template-columns: 1fr; } }
+    .theme-card {
+      background: #fff;
+      border: 1px solid #C2F0EC;
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+    }
+    .theme-count {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #12615C;
+      line-height: 1;
+    }
+    .theme-label {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #1A524D;
+      margin: 0.2rem 0 0.35rem;
+    }
+    .theme-card p { font-size: 0.83rem; color: #4A807C; margin: 0; }
+
+    /* ── Design implication dark box ── */
+    .implication-box {
+      background: #1A524D;
+      border-radius: 10px;
+      padding: 1.8rem 2.2rem;
+      margin: 2rem 0 1rem;
+    }
+    .implication-box p {
+      color: #CFE6E3;
+      margin: 0;
+      font-size: 0.97rem;
+      line-height: 1.8;
+    }
+    .implication-box strong { color: #fff; }
+
+    /* ── Section divider spacing ── */
+    .findings-section .text-with-margins > div { margin-bottom: 1rem; }
+
+    /* ── RAG Trust — page accent. The ONLY per-page hero
+       declaration. Everything else is in case-study.css.
+       teal · verified >=4.5:1 as text on #FAFAF8 ── */
+    .rag-hero { --hero-accent: #16706B; }
+  
+    /* Page accent on <body> so h2/h3 and the drop-cap can reach it. */
+    body { --hero-accent: #16706B; }
+  
+    /* Citation DOI — accent, underline on hover only. */
+    .cs-caption a { color: var(--hero-accent); text-decoration: none; }
+    .cs-caption a:hover.cs-caption a:focus-visible { text-decoration: underline; }
+  </style>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MVNYZ6Y0L4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MVNYZ6Y0L4');
+</script>
+  
+</head>
+
+<body>
+
+  <a href="../index.html" class="home-btn" aria-label="Back to Home">
+  <svg viewBox="0 0 24 24" class="home-icon">
+    <path d="M10 20v-6h4v6c0 1.1.9 2 2 2h2c1.1 0 
+    2-.9 2-2v-8h1.55c.66 0 .99-.8.47-1.27L13.12 
+    3.52c-.6-.56-1.53-.56-2.12 0L2.98 10.73c-.52.47-.19 
+    1.27.47 1.27H5v8c0 1.1.9 2 2 2h2c1.1 0 
+    2-.9 2-2z"/>
+  </svg>
+</a>
+
+   <!-- Header 
+   <header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <div class="logo">
+        <a href="../index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>
+      </div>
+
+      <!-- <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="../index.html">Projects</a></li>
+          <li><a class="nav-link scrollto" href="../AboutMe.html">About</a></li>
+
+        </ul>-->
+        <!--<i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+
+    </div>
+    
+  </header><!-- End Header -->
+  
+    <!-- Hero Image -->
+<div class="project-hero rag-hero">
+  <div class="container">
+    <div class="text-with-margins">
+
+      <span class="badge-type">HCI Research &nbsp;·&nbsp; CHI EA '25</span>
+
+      <h1>Showing your work beats claiming confidence</h1>
+
+      <p class="hero-sub">I designed four transparency features for a retrieval-augmented AI tool used by financial analysts. A 50-person study disproved one of them, the one I had pushed for.</p>
+
+      <div class="meta-row">
+        <div class="meta-chip">Published at CHI EA '25, Yokohama</div>
+        <div class="meta-chip">50 financial professionals</div>
+      
+      
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- END RAG TRUST HERO -->
+  
+<!-- OLD RAG HERO
+    <div class="container-fluid hero-container">
+      <img src="assets/img/Hero.png" class="img-fluid border hero-image" alt="Example image" loading="lazy">
+    </div>
+
+    <!-- End Hero -->
+
+
+  
+  <main id="main">
+
+
+
+    <!-- ══ Snapshot ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:3rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Snapshot</h2>
+          <dl class="cs-snapshot">
+            <dt>Role</dt>      <dd>Product design</dd>
+            <dt>Focus</dt>     <dd>Four transparency features for a retrieval-augmented research tool, validated with 50 financial professionals</dd>
+            <dt>Published</dt> <dd>CHI EA '25, co-authored with Renuka Sindhgatta</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ The problem ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>The problem</h2>
+          <p>Financial analysts are expected to use AI tools they cannot audit. Regulatory compliance requires tracing every AI-generated insight back to its source, and retrieval-augmented systems don't expose enough of their reasoning to make that possible.</p>
+          <p>The trust problem runs both ways. Over-reliance is dangerous in high-stakes decisions; blanket scepticism means the tool goes unused. The design target isn't more trust, it's <em>calibrated</em> trust.</p>
+          <p>Before designing anything, I ran informal interviews about what people actually want from a research tool when they're deciding where to put money. Those conversations shaped what the four features were trying to do.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Four features, four bets — the four screenshots live here ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Four features, four bets</h2>
+
+          <div class="fs-framed" style="margin-top:1.4rem;">
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/RAG/confidence tag.png" class="img-fluid" alt="Confidence level tag reading LOW, MEDIUM or HIGH beside a generated answer" data-aos="zoom-in" loading="lazy"></button>
+                <h4 style="margin-top:0.7rem;">Confidence levels</h4>
+                <p><strong>Confidence levels. LOW, MEDIUM, HIGH.</strong> My bet, and my idea: analysts should know how sure the system is before weighting its answer.</p>
+              </div>
+              <div class="col-md-6 mb-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/RAG/highlight.jpg" class="img-fluid" alt="Source document with the exact passage behind the answer highlighted" data-aos="zoom-in" loading="lazy"></button>
+                <h4 style="margin-top:4.9rem;">Source highlighting</h4>
+                <p><strong>Source highlighting.</strong> Show the exact passage behind an answer, so reasoning is traceable rather than asserted.</p>
+              </div>
+              <div class="col-md-6 mb-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/RAG/branching.png" class="img-fluid" alt="Branched conversation showing two parallel lines of inquiry" data-aos="zoom-in" loading="lazy"></button>
+                <h4 style="margin-top:0.7rem;">Branching</h4>
+                <p><strong>Branching.</strong> Let analysts pursue parallel lines of inquiry without losing context.</p>
+              </div>
+              <div class="col-md-6 mb-4">
+                <button type="button" class="cs-expandable"><img src="./assets/img/RAG/feedback_new.png" class="img-fluid" alt="Feedback control offering categorical and open-ended responses" data-aos="zoom-in" loading="lazy"></button>
+                <h4 style="margin-top:0.7rem;">Feedback</h4>
+                <p><strong>Feedback.</strong> Categorical and open-ended, so the system can be corrected rather than only accepted or ignored.</p>
+              </div>
+            </div>
+            <p class="cs-caption">Four features, four bets. One of them was mine, and the study disproved it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ The study ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>The study</h2>
+          <details class="cs-drawer">
+            <summary>Method and measures</summary>
+            <div class="cs-drawer__body">
+              <p>50 financial professionals. Pre- and post-task trust surveys, Wilcoxon signed-rank for the quantitative comparisons, thematic analysis for the qualitative.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ What it proved me wrong about ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>What it proved me wrong about</h2>
+          <p><strong>Confidence levels did nothing.</strong> On their own they failed to significantly increase trust (p = 0.080). The most intuitive feature, the one that looks like transparency, was the one that didn't work. It was also mine.</p>
+          <p>The reason, I think: a confidence score is a claim about reliability, not evidence of it. It asks an analyst to trust the system's self-assessment, which is precisely the thing they cannot verify. It restates the problem in smaller type.</p>
+          <p><strong>Highlighting worked on both measures.</strong> Combined with confidence levels it significantly increased trust (p = 0.0036); alone it significantly improved understanding (p = 0.0021). Analysts could trace a claim back to a specific passage and judge it themselves.</p>
+
+          <div class="fs-framed" style="margin-top:1.4rem;">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <button type="button" class="cs-expandable"><img src="./assets/img/RAG/trust.jpg" class="img-fluid" alt="Chart of trust scores across the four transparency features" data-aos="zoom-in" loading="lazy"></button>
+              </div>
+              <div class="col-md-6 mb-3">
+                <button type="button" class="cs-expandable"><img src="./assets/img/RAG/understanding.jpg" class="img-fluid" alt="Chart of comprehension scores across the four transparency features" data-aos="zoom-in" loading="lazy"></button>
+              </div>
+            </div>
+            <p class="cs-caption">Trust and understanding, measured across the four features.</p>
+          </div>
+
+          <p><strong>Branching mattered more than either.</strong> 27 of 50 named it their most valuable control feature, ahead of sources (15), feedback (26), and personalisation (8). I had designed it as a convenience. Participants used it to verify reasoning before acting.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ What follows for design ══ -->
+    <div class="frame-bg" style="background:#FFFFFF; width:100%;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>What follows for design</h2>
+          <ul>
+            <li>A system's self-reported confidence is not transparency. Showing what it used is.</li>
+            <li>Traceability beats summary: analysts want the passage, not a description of the passage.</li>
+            <li>Control features get repurposed. Branching was built for convenience and used for verification, worth watching for, because it tells you what users actually needed.</li>
+          </ul>
+
+          <h3>What I'd design now</h3>
+          <p>If I rebuilt this tool with what the study produced, I'd cut confidence levels entirely and spend the space on retrieval. Highlighting won because it let analysts check the work themselves, so the interface should show more of what the system read and less of what it thinks about what it read. Branching moves from a convenience feature to the primary surface, since that's what participants actually used to verify reasoning before acting.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closing question, set as a note. -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%;">
+      <div class="container padding" style="padding-top:0; padding-bottom:0;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <div class="cs-note">
+            <p>Which would you trust more: a system that tells you how sure it is, or one that shows you what it used?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Outcome  +  citation  +  closing line ══ -->
+    <div class="frame-bg" style="background:#FAFAF8; width:100%; padding-bottom:4rem;">
+      <div class="container padding" style="padding-top:3.5rem;" data-aos="fade-up">
+        <div class="text-with-margins">
+          <h2>Outcome</h2>
+          <p>Published at CHI EA '25. The findings apply wherever AI-assisted decisions carry accountability, legal, healthcare, consulting, anywhere a recommendation has to be defensible.</p>
+          <p class="cs-caption">Divya Ravi and Renuka Sindhgatta. 2025. <em>Exploring Trust and Transparency in Retrieval-Augmented Generation for Domain Experts.</em> CHI EA '25. DOI: <a href="https://doi.org/10.1145/3706599.3719985" target="_blank" rel="noopener">10.1145/3706599.3719985</a></p>
+
+        </div>
+      </div>
+    </div>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+    <footer id="footer">
+      <div class="container">
+        <div class="row">
+
+
+    <div class="container">
+      <div class="credits">
+        <div class="copyright">
+        <p>&copy; <script>document.write(new Date().getFullYear())</script><strong> Divya Ravi</p></strong>
+        <a style="font-size: smaller;">Designed by Divya Ravi</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <div id="preloader" aria-hidden="true"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+
+  <!-- PATH: vendor JS — Bootstrap 5 bundle + AOS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <!-- PATH: flow strip + group frames (shared) -->
+  <script src="assets/js/flow-strip.js?v=5"></script>
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
