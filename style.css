@@ -97,6 +97,9 @@ img { display: block; max-width: 100%; }
 }
 .nav-links a:hover::after { width: 100%; }
 .nav-links a:hover { color: #fff; }
+@media (max-width: 800px) {
+  .nav-links a { font-size: 0.75rem;}
+}
 #nav.scrolled .nav-links a { color: var(--muted); }
 #nav.scrolled .nav-links a:hover { color: var(--blue); }
 
